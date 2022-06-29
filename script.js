@@ -1,4 +1,33 @@
 let conteudoTela = document.querySelector('.conteudo');
+let arrayQuizzes;
+
+function buscarQuizzes(){
+
+    let promise = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes");
+    promise.then(renderizarQuizzes);
+    console.log(promise)
+}
+
+buscarQuizzes();
+
+function renderizarQuizzes(resposta){
+    arrayQuizzes = resposta.data;
+    console.log(arrayQuizzes)
+
+    let galeriaQuizz = document.querySelector(".galeria");
+
+    for (let i = 0; i < 1; i++ ){
+
+            galeriaQuizz.innerHTML += `
+            <div class="quizz1">
+                        <img src="${arrayQuizzes[20].image}">
+                        <span>O quanto você é de boas?</span>
+                    </div>
+            `
+    }
+}
+
+
 
 
 function exibirQuizz(quizz) {
