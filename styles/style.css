@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&display=swap');
+
 body{
     font-family: 'Roboto', sans-serif;
     background-color: #fafafa;
     box-sizing: border-box;
-
 }
 
 .topo{
@@ -23,6 +23,8 @@ body{
     cursor: pointer;
 }
 
+
+
 .criarQuizz {
     height: 181px;
     width: 1051px;
@@ -33,6 +35,10 @@ body{
     border: 1px dashed #D5D5D5;
     background-color: #fafafa;
     margin: 77px auto 112px;
+}
+
+.criarQuizz :nth-child(2){
+    cursor: pointer;
 }
 
 .criarQuizz p {
@@ -57,6 +63,44 @@ body{
     border-radius: 50px;    
 }
 
+.seusQuizzes {
+    height: 217px;
+    width: 1050px;
+    margin: 69px auto 48px;
+}
+
+.seusQuizzes :nth-child(1){
+    display: flex;
+    
+}
+
+.seusQuizzes p {
+    height: 23px;
+    width: 158px;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.seusQuizzes span{
+    height: 54px;
+    font-weight: 400;
+    font-size: 19px;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    margin: 0px 10px 7px;
+    line-height: 22px;
+}
+
+.seusQuizzes ion-icon {
+    height: 25px;
+    width: 25px;
+    color: #ffffff;
+    border-radius: 50%;
+    background-color: #EC362D;
+
+}
+
 .todosQuizzes{
     width: 1051px;
     margin: 0 auto;
@@ -72,14 +116,16 @@ body{
 .galeria {
     height: 381px;
     width: 1051px;
+    margin-top: 13px;
     display: flex;
-    justify-content: space-between;
+    
 }
 
 .galeria div{
     height: 181px;
     width: 340px;
     background-color: azure;
+    margin-right: 15px;
 }
 
 .galeria img{
@@ -88,24 +134,45 @@ body{
 }
 
 .galeria span{
+    height: 54px;
     font-weight: 400;
     font-size: 19px;
+    display: flex;
+    align-items: center;
     color: #ffffff;
+    margin: 0px 10px 7px;
+    line-height: 22px;
 }
 
 .quizz1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     border-radius: 5px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(/Img/simpsons.png);
+    background-size: cover;
 }
 
 .quizz2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     border-radius: 5px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(/Img/preguica.png);
+    background-size: cover;
 }
 
 .quizz3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     border-radius: 5px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%), url(/Img/simpsons.png);
+    background-size: cover;
+}
+
+.escondido {
+    display: none;
 }
 
 .topoQuizz {
