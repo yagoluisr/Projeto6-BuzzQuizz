@@ -61,6 +61,15 @@ function exibirQuizz(quizz) {
     title: "Qual dos personagens de Friends mais te representa?"};
 
     conteudoTela.innerHTML = '';
+
+    gerarBanner(quizz);
+
+    gerarPerguntas(quizz);
+
+    console.log(quizz);
+}
+
+function gerarBanner(quizz) {
     conteudoTela.innerHTML += `
         <div>
             <div class="bannerQuizz">
@@ -69,7 +78,9 @@ function exibirQuizz(quizz) {
             </div>
         </div>
     `;
+}
 
+function gerarPerguntas(quizz) {
     for (let i = 0; i < quizz.questions.length; i++) {
 
         conteudoTela.innerHTML += `
@@ -81,12 +92,9 @@ function exibirQuizz(quizz) {
                 ${gerarOpcoes(quizz, i)};
             </div>
         </div>`;
-
         
         document.querySelector(`.pergunta${i}`).style.backgroundColor = `${quizz.questions[i].color}`;
     }
-
-    console.log(quizz);
 }
 
 function gerarOpcoes(quizz, idQuestions) {
