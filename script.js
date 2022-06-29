@@ -13,29 +13,51 @@ function exibirQuizz(quizz) {
         minValue: "90",
         text: "fghtgjhdhtgfhdfshfghjjmkfgghbnfgbd",
         title: "htrhthftghff"}],
-    questions: [
-        {answers: [{
-            image: "http://www.hfhfhf.com",
-            isCorrectAnswer: false,
-            text: "hdhshshshs"},
-            {
+        questions: [
+            {answers: [{
                 image: "http://www.hfhfhf.com",
                 isCorrectAnswer: false,
                 text: "hdhshshshs"},
-            {
-            image: "http://www.hfhfhf.com",
-            isCorrectAnswer: false,
-            text: "hdhshshshs"},
-            {
-            image: "http://www.hfhfhf.com",
-            isCorrectAnswer: false,
-            text: "hdhshshshs"},
-            {
-            image: "http://www.hfhfhf.com",
-            isCorrectAnswer: true,
-            text: "hdhshshshs"}],
-        color: "#444444",
-        title: "hdhdhdhdhdhdhdhdhdhdhdhdhdhdhdhd"}],
+                {
+                    image: "http://www.hfhfhf.com",
+                    isCorrectAnswer: false,
+                    text: "hdhshshshs"},
+                {
+                image: "http://www.hfhfhf.com",
+                isCorrectAnswer: false,
+                text: "hdhshshshs"},
+                {
+                image: "http://www.hfhfhf.com",
+                isCorrectAnswer: false,
+                text: "hdhshshshs"},
+                {
+                image: "http://www.hfhfhf.com",
+                isCorrectAnswer: true,
+                text: "hdhshshshs"}],
+            color: "#444444",
+            title: "hdhdhdhdhdhdhdhdhdhdhdhdhdhdhdhd"},
+            {answers: [{
+                image: "http://www.hfhfhf.com",
+                isCorrectAnswer: false,
+                text: "hdhshshshs"},
+                {
+                    image: "http://www.hfhfhf.com",
+                    isCorrectAnswer: false,
+                    text: "hdhshshshs"},
+                {
+                image: "http://www.hfhfhf.com",
+                isCorrectAnswer: false,
+                text: "hdhshshshs"},
+                {
+                image: "http://www.hfhfhf.com",
+                isCorrectAnswer: false,
+                text: "hdhshshshs"},
+                {
+                image: "http://www.hfhfhf.com",
+                isCorrectAnswer: true,
+                text: "hdhshshshs"}],
+            color: "#000000",
+            title: "hdhdhdhdhdhdhdhdhdhdhdhdhdhdhdhd"}],
     title: "Qual dos personagens de Friends mais te representa?"};
 
     conteudoTela.innerHTML = '';
@@ -45,17 +67,25 @@ function exibirQuizz(quizz) {
                 <img src="${quizz.image}">
                 <p>${quizz.title}</p>
             </div>
-            <div class="quizzPergunta">
-                <div>
-                    <p></p>
-                </div>
-                <div class="opcoes">
-                    <img src="">
-                    <p></p>
-                </div>
-            </div>
         </div>
     `;
+
+    for (let i = 0; i < quizz.questions.length; i++) {
+
+        conteudoTela.innerHTML += `
+        <div class="quizzPergunta">
+            <div class="pergunta${i} pergunta">
+                <p>${quizz.questions[i].title}</p>
+            </div>
+            <div class="opcoes">
+                <img src="">
+                <p></p>
+            </div>
+        </div>`;
+
+        
+        document.querySelector(`.pergunta${i}`).style.backgroundColor = `${quizz.questions[i].color}`;
+    }
 
     console.log(quizz);
 }
