@@ -282,7 +282,7 @@ body{
     opacity: 0.3;
 }
 
-.quizzPergunta .opcao-incorreta p {
+.quizzPergunta .opcao-validada p {
     color: #FF4B4B;
 }
 

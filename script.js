@@ -1,6 +1,6 @@
 let conteudoTela = document.querySelector('.conteudo');
 let arrayQuizzes;
-let quizz;
+let quizzEscolhido;
 
 function buscarQuizzes(){
 
@@ -89,6 +89,7 @@ function exibirQuizz(quizz) {
             color: "#444444",
             title: "hdhdhdhdhdhdhdhdhdhdhdhdhdhdhdhd"}],
     title: "Qual dos personagens de Friends mais te representa?"};
+    quizzEscolhido = quizz;
 
     conteudoTela.innerHTML = '';
 
@@ -135,12 +136,22 @@ function gerarOpcoes(quizz, idQuestions) {
 
     for (let i = 0; i < respostas.length; i++) {
 
-       divOpcoes.innerHTML += `
+        if (respostas[i].isCorrectAnswer) {
+            divOpcoes.innerHTML += `
+            <div class="opcao correta" onclick="selecionarOpcao(this)">
+                <img src="${respostas[i].image}">
+                <p>${respostas[i].text}</p>
+            </div>
+        `;
+        }
+        else {
+            divOpcoes.innerHTML += `
             <div class="opcao" onclick="selecionarOpcao(this)">
                 <img src="${respostas[i].image}">
                 <p>${respostas[i].text}</p>
             </div>
         `;
+        }
     }
 
     return divOpcoes;
@@ -157,11 +168,18 @@ function selecionarOpcao(opcaoEscolhida) {
             }
         });
 
-        corrigirResposta();
+        corrigirResposta(opcaoEscolhida, opcoes);
     }
 }
 
-function corrigirResposta() {
+function corrigirResposta(opcaoEscolhida, opcoes) {
+    let respostaCorreta = opcaoEscolhida.parentNode.querySelector(".opcao.correta");
+
+    opcoes.forEach(elemento => {
+        if (elemento === respostaCorreta){
+            elemento.classList.add("opcao-correta");
+        }
+        else {elemento.classList.add("opcao-validada")}});
 }
 
 function recarregarPagina() {
