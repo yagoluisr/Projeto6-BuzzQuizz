@@ -49,12 +49,12 @@ function exibirCriarQuizz() {
         <span>Comece pelo começo</span>
 
         <div class="infoBasicas">
-            <input type="text" placeholder="Título do seu quizz">
-            <input type="text" placeholder="URL da imagem do seu quizz">
-            <input type="text" placeholder="Quantidade de perguntas do quizz">
-            <input type="text" placeholder="Quantidade de níveis do quizz">
+            <input type="text" placeholder="Título do seu quizz" class"titulo">
+            <input type="text" placeholder="URL da imagem do seu quizz" class"url">
+            <input type="text" placeholder="Quantidade de perguntas do quizz" class"qtdPerguntas">
+            <input type="text" placeholder="Quantidade de níveis do quizz" class"niveis">
         </div>
-        <div class="prosseguirPerguntas">
+        <div class="prosseguirPerguntas" onclick = "verificarDados()">
             <p>Prosseguir pra criar perguntas</p>
         </div>
     </div>
@@ -224,4 +224,61 @@ function recarregarPagina() {
 
 function embaralhar() {
     return Math.random() -0.5;
+}
+
+// ***** Tela 3 ****
+
+
+function verificarDados(){
+
+    let titulo = document.querySelector(".infoBasicas :nth-child(1)").value;
+    let url = document.querySelector(".infoBasicas :nth-child(2)").value;
+    let perguntas = document.querySelector(".infoBasicas :nth-child(3)").value;
+    let niveis = document.querySelector(".infoBasicas :nth-child(4)").value;
+
+    console.log(verificarTitulo(titulo));
+    console.log(verificarUrl(url));
+    console.log(verificarPerguntas(perguntas));
+    console.log(verificarNiveis(niveis));
+
+    if(verificarTitulo(titulo) !== true || verificarUrl(url) !== true || verificarPerguntas(perguntas) !== true || verificarNiveis(niveis) !== true ){
+        alert("Atenção, uns dos dados está inválido");
+    }
+}
+
+function verificarTitulo(titulo){
+
+    if(titulo.length > 20 && titulo.length < 65){
+        
+        return true;
+    }    
+    return false;
+}
+
+function verificarUrl(string){
+        
+        try {
+         let url = new URL(string)
+         return true;
+         //console.log("Valid URL!")
+       } catch(err) {
+            return false;   
+        //console.log("Invalid URL!")
+       }
+}
+
+function verificarPerguntas(perguntas){
+    
+    if(perguntas >= 3){
+        return true;
+    }
+    return false;
+}
+
+function verificarNiveis(niveis){
+   
+    if(niveis >= 2){
+        return true;
+    }
+    return false;
 }
