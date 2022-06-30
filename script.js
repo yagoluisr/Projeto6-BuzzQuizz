@@ -1,6 +1,8 @@
 let conteudoTela = document.querySelector('.conteudo');
 let arrayQuizzes;
 let quizzEscolhido;
+let idPerguntaAtual = 0;
+
 
 function buscarQuizzes(){
 
@@ -160,8 +162,9 @@ function gerarOpcoes(quizz, idQuestions) {
 function selecionarOpcao(opcaoEscolhida) {
     let opcoes = opcaoEscolhida.parentNode.querySelectorAll(".opcao");
     let jaEscolhida = opcaoEscolhida.parentNode.querySelector(".opcao-nao-selecionada");
+    console.log('escolhida: ' + opcaoEscolhida);
 
-    if (jaEscolhida === null) {
+    if (jaEscolhida === null && ehPerguntaAtual(opcaoEscolhida)) {
         opcoes.forEach(element => {
             if (element !== opcaoEscolhida) {
                 element.classList.add("opcao-nao-selecionada");
@@ -180,6 +183,18 @@ function corrigirResposta(opcaoEscolhida, opcoes) {
             elemento.classList.add("opcao-correta");
         }
         else {elemento.classList.add("opcao-validada")}});
+}
+
+function ehPerguntaAtual(opcao) {
+    let perguntaAtual = opcao.parentNode.parentNode.querySelector(`.perguntas.pergunta${idPerguntaAtual}`);
+    if (perguntaAtual !== null) {
+        idPerguntaAtual++;
+
+        let novaPerguntaAtual = document.querySelector(`.perguntas.pergunta${idPerguntaAtual}`)
+        setTimeout(function(){novaPerguntaAtual.parentNode.scrollIntoView({behavior: "smooth"})}, 2000);
+
+        return perguntaAtual;
+    }
 }
 
 function recarregarPagina() {
