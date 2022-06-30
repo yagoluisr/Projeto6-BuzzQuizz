@@ -2,6 +2,8 @@ let conteudoTela = document.querySelector('.conteudo');
 let arrayQuizzes;
 let quizzEscolhido;
 let idPerguntaAtual = 0;
+let pontuacao = 0;
+let porcentagem = 0;
 
 
 function buscarQuizzes(){
@@ -38,17 +40,15 @@ function obterQuizz(id){
 }
 
 
-function exibirQuizz(quizz) {
+function exibirQuizz(objeto) {
     
-    quizzEscolhido = quizz.data;
+    quizzEscolhido = objeto.data;
 
     conteudoTela.innerHTML = '';
 
     gerarBanner(quizzEscolhido);
 
     gerarPerguntas(quizzEscolhido);
-
-    console.log(quizzEscolhido);
 }
 
 function gerarBanner(quizzEscolhido) {
@@ -60,7 +60,6 @@ function gerarBanner(quizzEscolhido) {
             </div>
         </div>
     `;
-    console.log(quizzEscolhido);
 }
 
 function gerarPerguntas(quizzEscolhido) {
@@ -80,15 +79,8 @@ function gerarPerguntas(quizzEscolhido) {
     }
 
     conteudoTela.innerHTML += `
-        <div class="quizzPergunta caixa-resultado escondido">
-            <div class="pergunta${quizz.questions.length}">
-                <p>opa, beleza vei</p>
-            </div>
-            <div class="caixa-conteudo">
-                <img src="">
-                <p>opa</p>
-            </div>
-        </div>`;
+        <div class="quizzPergunta caixa-resultado escondido"></div>
+    `;
 }
 
 function gerarOpcoes(quizzEscolhido, idQuestions) {
@@ -120,10 +112,30 @@ function gerarOpcoes(quizzEscolhido, idQuestions) {
     return divOpcoes;
 }
 
+function gerarCaixaResultado() {
+
+    let caixaPerguta = document.querySelector(".quizzPergunta.caixa-resultado");
+
+    let nivel = quizzEscolhido.levels[verificarNivel()];
+
+    let titulo = nivel.title;
+    let img = nivel.image;
+    let descricao = nivel.text;
+
+    caixaPerguta.innerHTML = `
+            <div class="pergunta${quizzEscolhido.questions.length}">
+                <p>${porcentagem}% de acerto: ${titulo}</p>
+            </div>
+            <div class="caixa-conteudo">
+                <img src="${img}">
+                <p>${descricao}</p>
+            </div>
+    `;
+}
+
 function selecionarOpcao(opcaoEscolhida) {
     let opcoes = opcaoEscolhida.parentNode.querySelectorAll(".opcao");
     let jaEscolhida = opcaoEscolhida.parentNode.querySelector(".opcao-nao-selecionada");
-    console.log('escolhida: ' + opcaoEscolhida);
 
     if (jaEscolhida === null && ehPerguntaAtual(opcaoEscolhida)) {
         opcoes.forEach(element => {
@@ -143,7 +155,26 @@ function corrigirResposta(opcaoEscolhida, opcoes) {
         if (elemento === respostaCorreta){
             elemento.classList.add("opcao-correta");
         }
-        else {elemento.classList.add("opcao-validada")}});
+        else {elemento.classList.add("opcao-validada")}
+    });
+
+    if (respostaCorreta === opcaoEscolhida) {
+        pontuacao++;
+    }
+}
+
+function verificarNivel() {
+    porcentagem = Math.round((pontuacao/ quizzEscolhido.questions.length)*100);
+    
+    let niveis = quizzEscolhido.levels;
+
+    for (let i = niveis.length-1; i >= 0; i--) {
+        let valorMinimo = quizzEscolhido.levels[i].minValue;
+
+        if (porcentagem >= valorMinimo) {
+            return i;
+        }
+    }
 }
 
 function ehPerguntaAtual(opcao) {
@@ -154,6 +185,7 @@ function ehPerguntaAtual(opcao) {
         let novaPerguntaAtual = document.querySelector(`.pergunta${idPerguntaAtual}`)
         setTimeout(function(){
             if (idPerguntaAtual === quizzEscolhido.questions.length) {
+                gerarCaixaResultado();
                 document.querySelector(".caixa-resultado").classList.remove("escondido");
             }
             novaPerguntaAtual.parentNode.scrollIntoView({behavior: "smooth"})
