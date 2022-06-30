@@ -104,6 +104,8 @@ function gerarPerguntas(quizzEscolhido) {
     conteudoTela.innerHTML += `
         <div class="quizzPergunta caixa-resultado escondido"></div>
     `;
+
+    gerarBotoes();
 }
 
 function gerarOpcoes(quizzEscolhido, idQuestions) {
@@ -156,6 +158,19 @@ function gerarCaixaResultado() {
     `;
 }
 
+function gerarBotoes() {
+    conteudoTela.innerHTML += `
+        <div class="botoes escondido">
+            <div class="botao-reiniciar" onclick="reiniciarQuizz()">
+                <p>Reiniciar Quizz</p>
+            </div>
+            <div class="voltar-home" onclick="irHome()">
+                <p>Volta para home</p>
+            </div>
+        </div>
+    `;
+}
+
 function selecionarOpcao(opcaoEscolhida) {
     let opcoes = opcaoEscolhida.parentNode.querySelectorAll(".opcao");
     let jaEscolhida = opcaoEscolhida.parentNode.querySelector(".opcao-nao-selecionada");
@@ -200,18 +215,59 @@ function verificarNivel() {
     }
 }
 
+function irHome() {
+    conteudoTela.innerHTML = '';
+    buscarQuizzes();
+}
+
+function reiniciarQuizz() {
+    reiniciarVariaveis();
+    retirarClasses();
+    document.querySelector(".bannerQuizz").scrollIntoView({behavior: "smooth"});
+}
+
+function reiniciarVariaveis() {
+    idPerguntaAtual = 0;
+    pontuacao = 0;
+    porcentagem = 0;
+}
+
+function retirarClasses() {
+    let resetar;
+
+    resetar = document.querySelectorAll(".opcao-correta");
+    resetar.forEach(elemento => {elemento.classList.remove('opcao-correta')});
+
+    resetar = document.querySelectorAll(".opcao-validada");
+    resetar.forEach(elemento => {elemento.classList.remove('opcao-validada')});
+
+    resetar = document.querySelectorAll(".opcao-nao-selecionada");
+    resetar.forEach(elemento => {elemento.classList.remove('opcao-nao-selecionada')});
+
+    document.querySelector(".caixa-resultado").classList.add("escondido");
+    document.querySelector(".botoes").classList.add("escondido");
+}
+
 function ehPerguntaAtual(opcao) {
     let perguntaAtual = opcao.parentNode.parentNode.querySelector(`.perguntas.pergunta${idPerguntaAtual}`);
+    
     if (perguntaAtual !== null) {
         idPerguntaAtual++;
 
-        let novaPerguntaAtual = document.querySelector(`.pergunta${idPerguntaAtual}`)
+        let novaPerguntaAtual = document.querySelector(`.pergunta${idPerguntaAtual}`);
+
         setTimeout(function(){
+
             if (idPerguntaAtual === quizzEscolhido.questions.length) {
                 gerarCaixaResultado();
                 document.querySelector(".caixa-resultado").classList.remove("escondido");
+                document.querySelector(".botoes").classList.remove("escondido");
+
+                document.querySelector(".caixa-resultado").scrollIntoView({behavior: "smooth"});
+            } else {
+                novaPerguntaAtual.parentNode.scrollIntoView({behavior: "smooth"});
             }
-            novaPerguntaAtual.parentNode.scrollIntoView({behavior: "smooth"})
+            
         }, 2000);
 
         return perguntaAtual;
