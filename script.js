@@ -25,7 +25,8 @@ function renderizarQuizzes(resposta){
 
             galeriaQuizz.innerHTML += `
             <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id})">
-            <img src="${arrayQuizzes[i].image}">
+                <div class="degrade">sdfgsdfg</div>
+                <img src="${arrayQuizzes[i].image}">
                 <span>${arrayQuizzes[i].title}</span>
             </div>
             `
