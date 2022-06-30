@@ -3,9 +3,7 @@
 body{
     font-family: 'Roboto', sans-serif;
     background-color: #fafafa;
-    box-sizing: border-box;
-
-    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+    padding-bottom: 85px;
 }
 
 * {
@@ -239,16 +237,17 @@ body{
     height: auto;
     background-color: #FFFFFF;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.05);
-    padding: 30px;
+    padding: 18px;
     margin: 42px auto auto;
 }
 
 .perguntas {
-    width: 100%;
+    width: 688px;
     height: 137px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 12px auto 0;
 }
 
 .perguntas p {
@@ -258,10 +257,11 @@ body{
 }
 
 .quizzPergunta .opcoes {
-    width: 100%;
+    width: 688px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    margin: 0 auto 12px;
 }
 
 .quizzPergunta .opcao {
@@ -290,4 +290,15 @@ body{
 
 .quizzPergunta .opcao-correta  p {
     color: #009C22;
+}
+
+.caixa-resultado > div {
+    background-color: #EC362D;
+    height: 99px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 23px;
+    color: #FFFFFF;
 }

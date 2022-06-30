@@ -128,6 +128,17 @@ function gerarPerguntas(quizz) {
         gerarOpcoes(quizz, i);
         document.querySelector(`.pergunta${i}`).style.backgroundColor = `${quizz.questions[i].color}`;
     }
+
+    conteudoTela.innerHTML += `
+        <div class="quizzPergunta caixa-resultado escondido">
+            <div class="pergunta${quizz.questions.length}">
+                <p>opa, beleza vei</p>
+            </div>
+            <div class="caixa-conteudo">
+                <img src="">
+                <p>opa</p>
+            </div>
+        </div>`;
 }
 
 function gerarOpcoes(quizz, idQuestions) {
@@ -190,8 +201,13 @@ function ehPerguntaAtual(opcao) {
     if (perguntaAtual !== null) {
         idPerguntaAtual++;
 
-        let novaPerguntaAtual = document.querySelector(`.perguntas.pergunta${idPerguntaAtual}`)
-        setTimeout(function(){novaPerguntaAtual.parentNode.scrollIntoView({behavior: "smooth"})}, 2000);
+        let novaPerguntaAtual = document.querySelector(`.pergunta${idPerguntaAtual}`)
+        setTimeout(function(){
+            if (idPerguntaAtual === quizzEscolhido.questions.length) {
+                document.querySelector(".caixa-resultado").classList.remove("escondido");
+            }
+            novaPerguntaAtual.parentNode.scrollIntoView({behavior: "smooth"})
+        }, 2000);
 
         return perguntaAtual;
     }
