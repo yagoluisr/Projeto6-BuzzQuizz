@@ -4,6 +4,8 @@ body{
     font-family: 'Roboto', sans-serif;
     background-color: #fafafa;
     box-sizing: border-box;
+
+    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 * {
@@ -245,7 +247,7 @@ body{
     margin: 42px auto auto;
 }
 
-.pergunta {
+.perguntas {
     width: 100%;
     height: 137px;
     display: flex;
@@ -253,19 +255,17 @@ body{
     justify-content: center;
 }
 
-.pergunta p {
+.perguntas p {
     font-weight: 700;
     font-size: 23px;
     color: #FFFFFF;
 }
 
 .quizzPergunta .opcoes {
-    width: 680px;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     justify-content: space-between;
-    margin: auto;
 }
 
 .quizzPergunta .opcao {
@@ -283,4 +283,16 @@ body{
     font-weight: 700;
     font-size: 20px;
     color: #000000;
+}
+
+.opcao-nao-selecionada {
+    opacity: 0.3;
+}
+
+.quizzPergunta .opcao-validada p {
+    color: #FF4B4B;
+}
+
+.quizzPergunta .opcao-correta  p {
+    color: #009C22;
 }

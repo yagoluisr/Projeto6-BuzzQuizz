@@ -1,5 +1,8 @@
 let conteudoTela = document.querySelector('.conteudo');
 let arrayQuizzes;
+let quizzEscolhido;
+let idPerguntaAtual = 0;
+
 
 function buscarQuizzes(){
 
@@ -88,6 +91,7 @@ function exibirQuizz(quizz) {
             color: "#444444",
             title: "hdhdhdhdhdhdhdhdhdhdhdhdhdhdhdhd"}],
     title: "Qual dos personagens de Friends mais te representa?"};
+    quizzEscolhido = quizz;
 
     conteudoTela.innerHTML = '';
 
@@ -114,36 +118,83 @@ function gerarPerguntas(quizz) {
 
         conteudoTela.innerHTML += `
         <div class="quizzPergunta">
-            <div class="pergunta${i} pergunta">
+            <div class="pergunta${i} perguntas">
                 <p>${quizz.questions[i].title}</p>
             </div>
-            <div class="opcoes">
-                ${gerarOpcoes(quizz, i)};
+            <div class="opcoes${i} opcoes">
             </div>
         </div>`;
         
+        gerarOpcoes(quizz, i);
         document.querySelector(`.pergunta${i}`).style.backgroundColor = `${quizz.questions[i].color}`;
     }
 }
 
 function gerarOpcoes(quizz, idQuestions) {
+    let divOpcoes = document.querySelector(`.conteudo .opcoes${idQuestions}`);
+
     let respostas = quizz.questions[idQuestions].answers;
     respostas = respostas.sort(embaralhar);
-    let opcoes = [];
 
     for (let i = 0; i < respostas.length; i++) {
 
-        let opcao = `
-            <div class="opcao">
+        if (respostas[i].isCorrectAnswer) {
+            divOpcoes.innerHTML += `
+            <div class="opcao correta" onclick="selecionarOpcao(this)">
                 <img src="${respostas[i].image}">
                 <p>${respostas[i].text}</p>
             </div>
         `;
-
-        opcoes.push(opcao);
+        }
+        else {
+            divOpcoes.innerHTML += `
+            <div class="opcao" onclick="selecionarOpcao(this)">
+                <img src="${respostas[i].image}">
+                <p>${respostas[i].text}</p>
+            </div>
+        `;
+        }
     }
 
-    return opcoes;
+    return divOpcoes;
+}
+
+function selecionarOpcao(opcaoEscolhida) {
+    let opcoes = opcaoEscolhida.parentNode.querySelectorAll(".opcao");
+    let jaEscolhida = opcaoEscolhida.parentNode.querySelector(".opcao-nao-selecionada");
+    console.log('escolhida: ' + opcaoEscolhida);
+
+    if (jaEscolhida === null && ehPerguntaAtual(opcaoEscolhida)) {
+        opcoes.forEach(element => {
+            if (element !== opcaoEscolhida) {
+                element.classList.add("opcao-nao-selecionada");
+            }
+        });
+
+        corrigirResposta(opcaoEscolhida, opcoes);
+    }
+}
+
+function corrigirResposta(opcaoEscolhida, opcoes) {
+    let respostaCorreta = opcaoEscolhida.parentNode.querySelector(".opcao.correta");
+
+    opcoes.forEach(elemento => {
+        if (elemento === respostaCorreta){
+            elemento.classList.add("opcao-correta");
+        }
+        else {elemento.classList.add("opcao-validada")}});
+}
+
+function ehPerguntaAtual(opcao) {
+    let perguntaAtual = opcao.parentNode.parentNode.querySelector(`.perguntas.pergunta${idPerguntaAtual}`);
+    if (perguntaAtual !== null) {
+        idPerguntaAtual++;
+
+        let novaPerguntaAtual = document.querySelector(`.perguntas.pergunta${idPerguntaAtual}`)
+        setTimeout(function(){novaPerguntaAtual.parentNode.scrollIntoView({behavior: "smooth"})}, 2000);
+
+        return perguntaAtual;
+    }
 }
 
 function recarregarPagina() {
