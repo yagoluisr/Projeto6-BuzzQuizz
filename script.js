@@ -18,115 +18,65 @@ function renderizarQuizzes(resposta){
     console.log(arrayQuizzes)
 
     let galeriaQuizz = document.querySelector(".galeria");
-
-    for (let i = 0; i < 1; i++ ){
+    
+    for (let i = 0; i < arrayQuizzes.length; i++ ){
 
             galeriaQuizz.innerHTML += `
-            <div class="quizz1">
-                        <img src="${arrayQuizzes[20].image}">
-                        <span>O quanto você é de boas?</span>
-                    </div>
+            <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id})">
+            <img src="${arrayQuizzes[i].image}">
+                <span>${arrayQuizzes[i].title}</span>
+            </div>
             `
     }
 }
 
+function obterQuizz(id){
 
+    let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${id}`);
+    promise.then(exibirQuizz);
+    console.log(promise);
+}
 
 
 function exibirQuizz(quizz) {
-    quizz = {id: 8185,
-    image: "https://i.pinimg.com/originals/b3/45/e4/b345e46becdaeaaa9dcf6ea6144c91a9.jpg",
-    levels: [
-        {image: "https://i.pinimg.com/originals/b3/45/e4/b345e46becdaeaaa9dcf6ea6144c91a9.jpg",
-        minValue: "50",
-        text: "fghtgjhdhtgfhdfshfghjjmkfgghbnfgbd",
-        title: "ththsrthhgdfgh"},
-        {image: "https://i.pinimg.com/originals/b3/45/e4/b345e46becdaeaaa9dcf6ea6144c91a9.jpg",
-        minValue: "90",
-        text: "fghtgjhdhtgfhdfshfghjjmkfgghbnfgbd",
-        title: "htrhthftghff"}],
-        questions: [
-            {answers: [{
-                image: "https://i.pinimg.com/originals/b3/45/e4/b345e46becdaeaaa9dcf6ea6144c91a9.jpg",
-                isCorrectAnswer: false,
-                text: "hdhshshshs"},
-                {
-                    image: "https://i.pinimg.com/originals/7d/98/84/7d98840fdff1b2e7cd508cc7f3a17403.jpg",
-                    isCorrectAnswer: false,
-                    text: "hdhshshshs"},
-                {
-                image: "https://i.pinimg.com/originals/94/32/cd/9432cdd515ab3d772334e471e230c211.jpg",
-                isCorrectAnswer: false,
-                text: "hdhshshshs"},
-                {
-                image: "https://i0.wp.com/abglt.org.br/wp-content/uploads/2020/10/wallpaper-pc1-scaled-1.jpg?fit=2560%2C1440&ssl=1",
-                isCorrectAnswer: false,
-                text: "hdhshshshs"},
-                {
-                image: "https://cdna.artstation.com/p/assets/images/images/002/664/530/large/ivan-bondar-trees-oceangrtgrg.jpg?1464272238",
-                isCorrectAnswer: true,
-                text: "hdhshshshs"}],
-            color: "#444444",
-            title: "hdhdhdhdhdhdhdhdhdhdhdhdhdhdhdhd"},
-            {answers: [{
-                image: "https://i.pinimg.com/originals/b3/45/e4/b345e46becdaeaaa9dcf6ea6144c91a9.jpg",
-                isCorrectAnswer: false,
-                text: "hdhshshshs"},
-                {
-                    image: "https://i.pinimg.com/originals/b3/45/e4/b345e46becdaeaaa9dcf6ea6144c91a9.jpg",
-                    isCorrectAnswer: false,
-                    text: "hdhshshshs"},
-                {
-                image: "https://i.pinimg.com/originals/b3/45/e4/b345e46becdaeaaa9dcf6ea6144c91a9.jpg",
-                isCorrectAnswer: false,
-                text: "hdhshshshs"},
-                {
-                image: "https://i.pinimg.com/originals/b3/45/e4/b345e46becdaeaaa9dcf6ea6144c91a9.jpg",
-                isCorrectAnswer: false,
-                text: "hdhshshshs"},
-                {
-                image: "https://i.pinimg.com/originals/b3/45/e4/b345e46becdaeaaa9dcf6ea6144c91a9.jpg",
-                isCorrectAnswer: true,
-                text: "hdhshshshs"}],
-            color: "#444444",
-            title: "hdhdhdhdhdhdhdhdhdhdhdhdhdhdhdhd"}],
-    title: "Qual dos personagens de Friends mais te representa?"};
-    quizzEscolhido = quizz;
+    
+    quizzEscolhido = quizz.data;
 
     conteudoTela.innerHTML = '';
 
-    gerarBanner(quizz);
+    gerarBanner(quizzEscolhido);
 
-    gerarPerguntas(quizz);
+    gerarPerguntas(quizzEscolhido);
 
-    console.log(quizz);
+    console.log(quizzEscolhido);
 }
 
-function gerarBanner(quizz) {
+function gerarBanner(quizzEscolhido) {
     conteudoTela.innerHTML += `
         <div>
             <div class="bannerQuizz">
-                <img src="${quizz.image}">
-                <p>${quizz.title}</p>
+                <img src="${quizzEscolhido.image}">
+                <p>${quizzEscolhido.title}</p>
             </div>
         </div>
     `;
+    console.log(quizzEscolhido);
 }
 
-function gerarPerguntas(quizz) {
-    for (let i = 0; i < quizz.questions.length; i++) {
-
+function gerarPerguntas(quizzEscolhido) {
+    for (let i = 0; i < quizzEscolhido.questions.length; i++) {
+        
         conteudoTela.innerHTML += `
         <div class="quizzPergunta">
             <div class="pergunta${i} perguntas">
-                <p>${quizz.questions[i].title}</p>
+                <p>${quizzEscolhido.questions[i].title}</p>
             </div>
             <div class="opcoes${i} opcoes">
             </div>
         </div>`;
         
-        gerarOpcoes(quizz, i);
-        document.querySelector(`.pergunta${i}`).style.backgroundColor = `${quizz.questions[i].color}`;
+        gerarOpcoes(quizzEscolhido, i);
+        document.querySelector(`.pergunta${i}`).style.backgroundColor = `${quizzEscolhido.questions[i].color}`;
     }
 
     conteudoTela.innerHTML += `
@@ -141,10 +91,10 @@ function gerarPerguntas(quizz) {
         </div>`;
 }
 
-function gerarOpcoes(quizz, idQuestions) {
+function gerarOpcoes(quizzEscolhido, idQuestions) {
     let divOpcoes = document.querySelector(`.conteudo .opcoes${idQuestions}`);
 
-    let respostas = quizz.questions[idQuestions].answers;
+    let respostas = quizzEscolhido.questions[idQuestions].answers;
     respostas = respostas.sort(embaralhar);
 
     for (let i = 0; i < respostas.length; i++) {
