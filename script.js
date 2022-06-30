@@ -6,6 +6,33 @@ let pontuacao = 0;
 let porcentagem = 0;
 
 
+function renderizarTela1() {
+    conteudoTela.innerHTML = `
+        <div class="tela1">
+            <div class="criarQuizz">
+                <p>Você não criou nenhum quizz ainda :(</p>
+            <div onclick="exibirCriarQuizz()">Criar Quizz</div>
+        </div>
+
+        <!-- <div class="seusQuizzes">
+            <div>
+                <p>Seus Quizzes</p>
+                <ion-icon name="add-outline" onclick="exibirCriarQuizz()"></ion-icon>
+            </div>
+            <div class="galeria"></div>
+        </div> -->
+        
+        <div class="todosQuizzes">
+            <p>Todos os Quizzes</p>
+            <div class="galeria"></div>
+        </div>
+    `;
+
+    buscarQuizzes();
+}
+
+renderizarTela1();
+
 function buscarQuizzes(){
 
     let promise = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes");
@@ -13,13 +40,11 @@ function buscarQuizzes(){
     console.log(promise)
 }
 
-buscarQuizzes();
-
 function renderizarQuizzes(resposta){
     arrayQuizzes = resposta.data;
     console.log(arrayQuizzes)
 
-    let galeriaQuizz = document.querySelector(".galeria");
+    let galeriaQuizz = document.querySelector(".todosQuizzes .galeria");
     
     for (let i = 0; i < arrayQuizzes.length; i++ ){
 
@@ -217,7 +242,7 @@ function verificarNivel() {
 
 function irHome() {
     conteudoTela.innerHTML = '';
-    buscarQuizzes();
+    renderizarTela1();
 }
 
 function reiniciarQuizz() {
