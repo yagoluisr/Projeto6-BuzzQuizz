@@ -320,6 +320,27 @@ img {
     margin-left: 21px;
 }
 
+.botao-reiniciar,
+.voltar-home {
+    width: 260px;
+    height: 52px;
+    border-radius: 15px;
+    background-color: #EC362D;
+    font-weight: 400;
+    font-size: 21px;
+    color: #FFF5F4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 57px auto 10px auto;
+}
+
+.voltar-home {
+    background-color: transparent;
+    color: #818181;
+    margin: auto;
+}
+
 .tela3 {
     display: flex;
     flex-direction: column;
