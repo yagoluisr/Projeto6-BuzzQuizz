@@ -25,8 +25,8 @@ function renderizarQuizzes(resposta){
 
             galeriaQuizz.innerHTML += `
             <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id})">
-                <div class="degrade">sdfgsdfg</div>
                 <img src="${arrayQuizzes[i].image}">
+                <div class="degrade"></div>
                 <span>${arrayQuizzes[i].title}</span>
             </div>
             `
@@ -39,6 +39,28 @@ function obterQuizz(id){
     promise.then(exibirQuizz);
     console.log(promise);
 }
+
+function exibirCriarQuizz() {
+    
+    conteudoTela.innerHTML = '';
+
+    conteudoTela.innerHTML += `
+    <div class="tela3">
+        <span>Comece pelo começo</span>
+
+        <div class="infoBasicas">
+            <input type="text" placeholder="Título do seu quizz">
+            <input type="text" placeholder="URL da imagem do seu quizz">
+            <input type="text" placeholder="Quantidade de perguntas do quizz">
+            <input type="text" placeholder="Quantidade de níveis do quizz">
+        </div>
+        <div class="prosseguirPerguntas">
+            <p>Prosseguir pra criar perguntas</p>
+        </div>
+    </div>
+    `;
+}
+
 
 
 function exibirQuizz(objeto) {
