@@ -15,14 +15,14 @@ function renderizarQuizzes(resposta){
     console.log(arrayQuizzes)
 
     let galeriaQuizz = document.querySelector(".galeria");
-
-    for (let i = 0; i < 1; i++ ){
+    
+    for (let i = 0; i < arrayQuizzes.length; i++ ){
 
             galeriaQuizz.innerHTML += `
-            <div class="quizz1">
-                        <img src="${arrayQuizzes[20].image}">
-                        <span>O quanto você é de boas?</span>
-                    </div>
+            <div class="quizz2" onclick="exibirQuizz(this)">
+            <img src="${arrayQuizzes[i].image}">
+                <span>${arrayQuizzes[i].title}</span>
+            </div>
             `
     }
 }
