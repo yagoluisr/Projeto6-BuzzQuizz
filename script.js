@@ -1,5 +1,6 @@
 let conteudoTela = document.querySelector('.conteudo');
 let arrayQuizzes;
+let quizz;
 
 function buscarQuizzes(){
 
@@ -114,36 +115,53 @@ function gerarPerguntas(quizz) {
 
         conteudoTela.innerHTML += `
         <div class="quizzPergunta">
-            <div class="pergunta${i} pergunta">
+            <div class="pergunta${i} perguntas">
                 <p>${quizz.questions[i].title}</p>
             </div>
-            <div class="opcoes">
-                ${gerarOpcoes(quizz, i)};
+            <div class="opcoes${i} opcoes">
             </div>
         </div>`;
         
+        gerarOpcoes(quizz, i);
         document.querySelector(`.pergunta${i}`).style.backgroundColor = `${quizz.questions[i].color}`;
     }
 }
 
 function gerarOpcoes(quizz, idQuestions) {
+    let divOpcoes = document.querySelector(`.conteudo .opcoes${idQuestions}`);
+
     let respostas = quizz.questions[idQuestions].answers;
     respostas = respostas.sort(embaralhar);
-    let opcoes = [];
 
     for (let i = 0; i < respostas.length; i++) {
 
-        let opcao = `
-            <div class="opcao">
+       divOpcoes.innerHTML += `
+            <div class="opcao" onclick="selecionarOpcao(this)">
                 <img src="${respostas[i].image}">
                 <p>${respostas[i].text}</p>
             </div>
         `;
-
-        opcoes.push(opcao);
     }
 
-    return opcoes;
+    return divOpcoes;
+}
+
+function selecionarOpcao(opcaoEscolhida) {
+    let opcoes = opcaoEscolhida.parentNode.querySelectorAll(".opcao");
+    let jaEscolhida = opcaoEscolhida.parentNode.querySelector(".opcao-nao-selecionada");
+
+    if (jaEscolhida === null) {
+        opcoes.forEach(element => {
+            if (element !== opcaoEscolhida) {
+                element.classList.add("opcao-nao-selecionada");
+            }
+        });
+
+        corrigirResposta();
+    }
+}
+
+function corrigirResposta() {
 }
 
 function recarregarPagina() {
