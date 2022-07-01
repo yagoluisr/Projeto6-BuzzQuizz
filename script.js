@@ -79,11 +79,13 @@ function exibirCriarQuizz() {
             <input type="text" placeholder="Quantidade de perguntas do quizz" class"qtdPerguntas">
             <input type="text" placeholder="Quantidade de níveis do quizz" class"niveis">
         </div>
-        <div class="prosseguirPerguntas" onclick = "verificarDados()">
+        <div class="prosseguirPerguntas" onclick = "criarPerguntas()">
             <p>Prosseguir pra criar perguntas</p>
         </div>
     </div>
     `;
+
+    //onclick="verificarDados()"
 }
 
 
@@ -323,7 +325,7 @@ function verificarDados(){
     console.log(verificarNiveis(niveis));
 
     if(verificarTitulo(titulo) !== true || verificarUrl(url) !== true || verificarPerguntas(perguntas) !== true || verificarNiveis(niveis) !== true ){
-        alert("Atenção, uns dos dados está inválido");
+        alert("Atenção, dado(s) inválido(s). Por favor, verifique os campos.");
     }
 }
 
@@ -362,4 +364,81 @@ function verificarNiveis(niveis){
         return true;
     }
     return false;
+}
+
+function criarPerguntas() {
+    let perguntas = 3;
+
+    conteudoTela.innerHTML = '';
+
+    conteudoTela.innerHTML += `
+        <div class="tela3">
+            <span>Crie suas perguntas</span>
+            <div class="tela-perguntas">
+            </div>
+            <div class="prosseguirPerguntas" onclick = "">
+                <p>Prosseguir para criar níveis</p>
+            </div>
+        </div>
+    `;
+
+    inserirPergunta(perguntas);
+}
+
+function inserirPergunta(perguntas) {
+
+    let tela = document.querySelector(".tela3 .tela-perguntas");
+
+    for (let i = 1; i <= perguntas; i++) {
+        tela.innerHTML += `
+        <div class="criar-pergunta">
+            <ul class="pergunta${i}">
+                <div onclick="expandirPergunta(${i})">
+                <span>Pergunta ${i}</span>
+                <img src="./Img/Editar.svg">
+                </div>
+                <li>
+                    <input type="text" placeholder="Texto da pergunta" class="titulo">
+                    <input type="text" placeholder="Cor de fundo da pergunta" class="titulo">
+                </li>
+                <li>
+                    <span>Resposta correta</span>
+                    <input type="text" placeholder="Resposta correta" class="titulo">
+                    <input type="text" placeholder="URL da imagem" class="titulo">
+                </li>
+                <li>
+                    <span>Respostas incorretas</span>
+                    <div>
+                        <input type="text" placeholder="Resposta incorreta 1" class="titulo">
+                        <input type="text" placeholder="URL da imagem 1" class="titulo">
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Resposta incorreta 2" class="titulo">
+                        <input type="text" placeholder="URL da imagem 2" class="titulo">
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Resposta incorreta 3" class="titulo">
+                        <input type="text" placeholder="URL da imagem 3" class="titulo">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        `;
+    }
+}
+
+function expandirPergunta(id) {
+    let perguntaSelecionada = document.querySelector(`.pergunta${id}`);
+    let imgPerguntaSelecionada = document.querySelector(`.pergunta${id} img`);
+
+    let jaSelecionada = document.querySelector(".expandir");
+    let imgJaSelecionada = document.querySelector(".expandir img");
+
+    if (jaSelecionada !== null) {
+        jaSelecionada.classList.toggle("expandir");
+        imgJaSelecionada.classList.toggle("escondido");
+    }
+    
+    perguntaSelecionada.classList.add("expandir");
+    imgPerguntaSelecionada.classList.add("escondido");
 }
