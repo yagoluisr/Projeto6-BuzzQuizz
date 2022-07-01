@@ -399,3 +399,80 @@ img {
     line-height: 25px;
     color: #FFF5F4;
 }
+
+.niveis {
+    height: 316px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    
+}
+
+.niveis :nth-child(1) {
+    height: 46px;
+    width: 564px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.niveis input {
+    height: 46px;
+    width: 564px;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 19px;
+    color:#BABABA;
+    background: #FFFFFF;
+    border: 1px solid #D1D1D1;
+    border-radius: 5px;
+    padding-left: 24px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 1100px){
+
+    .topo {
+        width: 100%;
+    }
+
+    .tela1 {
+        margin-top: 100px;
+        margin: 100px 15px 35px;
+    }
+
+    .conteudo {
+        margin-top: 0;
+    }
+
+    .criarQuizz {
+        width: 100%;
+        margin-bottom: 35px;
+    }
+
+    /* .seusQuizzes{
+
+    } */
+
+    .todosQuizzes {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .galeria {
+        width: 100%;
+    }
+
+    /* Tela 2 */
+
+    .topoQuizz {
+        height: 142px;
+        width: 300px;
+    }
+}

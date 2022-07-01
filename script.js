@@ -74,10 +74,10 @@ function exibirCriarQuizz() {
         <span>Comece pelo começo</span>
 
         <div class="infoBasicas">
-            <input type="text" placeholder="Título do seu quizz" class"titulo">
-            <input type="text" placeholder="URL da imagem do seu quizz" class"url">
-            <input type="text" placeholder="Quantidade de perguntas do quizz" class"qtdPerguntas">
-            <input type="text" placeholder="Quantidade de níveis do quizz" class"niveis">
+            <input type="text" placeholder="Título do seu quizz">
+            <input type="text" placeholder="URL da imagem do seu quizz">
+            <input type="text" placeholder="Quantidade de perguntas do quizz">
+            <input type="text" placeholder="Quantidade de níveis do quizz">
         </div>
         <div class="prosseguirPerguntas" onclick = "verificarDados()">
             <p>Prosseguir pra criar perguntas</p>
@@ -338,14 +338,14 @@ function verificarTitulo(titulo){
 
 function verificarUrl(string){
         
-        try {
-         let url = new URL(string)
-         return true;
-         //console.log("Valid URL!")
-       } catch(err) {
+    try {
+        let url = new URL(string)
+        return true;
+        //console.log("Valid URL!")
+    } catch(err) {
             return false;   
         //console.log("Invalid URL!")
-       }
+    }
 }
 
 function verificarPerguntas(perguntas){
@@ -359,6 +359,57 @@ function verificarPerguntas(perguntas){
 function verificarNiveis(niveis){
    
     if(niveis >= 2){
+        return true;
+    }
+    return false;
+}
+
+// **** Tela 3.3 ****
+
+function verificarNivelQuizz(){
+
+    let titulo = document.querySelector(".niveis :nth-child(2)").value;
+    let acertosMin = document.querySelector(".niveis :nth-child(3)").value;
+    let url = document.querySelector(".niveis :nth-child(4)").value;
+    let descricao = document.querySelector(".niveis :nth-child(5)").value;
+
+    console.log(Titulo_nivel(titulo));
+    console.log(PorCento_nivel(acertosMin));
+    console.log(Url_niveis(url));
+    console.log(Descricao_niveis(descricao));
+
+    if(Titulo_nivel(titulo) !== true || PorCento_nivel(acertosMin) !== true || Url_niveis(url) !== true || Descricao_niveis(descricao) !== true ){
+        alert("Atenção, uns dos dados está inválido");
+    }
+}
+
+function Titulo_nivel(titulo){
+    if(titulo.length > 10){
+        return true;
+    }
+    return false;
+}
+
+function PorCento_nivel(acertosMin) {
+    if(acertosMin >= 0 && acertosMin <= 100 && acertosMin !== ''){
+        return true;
+    }
+    return false;
+}
+
+function Url_niveis(string){
+    try {
+        let url = new URL(string)
+        return true;
+        //console.log("Valid URL!")
+    } catch(err) {
+            return false;   
+        //console.log("Invalid URL!")
+    }
+}
+
+function Descricao_niveis(descricao){
+    if(descricao.length >= 30){
         return true;
     }
     return false;
