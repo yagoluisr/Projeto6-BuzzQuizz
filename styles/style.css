@@ -358,7 +358,8 @@ img {
     margin-bottom: 27px;
 }
 
-.infoBasicas {
+.infoBasicas,
+.criar-pergunta {
     height: 256px;
     width: 600px;
     display: flex;
@@ -367,9 +368,11 @@ img {
     align-items: center;
     background-color: #FFFFFF;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+    padding: 15px 0;
 }
 
-.infoBasicas input {
+.infoBasicas input,
+.criar-pergunta input {
     height: 46px;
     width: 564px;
     font-weight: 400;
@@ -380,6 +383,11 @@ img {
     border: 1px solid #D1D1D1;
     border-radius: 5px;
     padding-left: 24px;
+}
+
+.infoBasicas input::placeholder,
+.criar-pergunta input::placeholder {
+    color:#BABABA;
 }
 
 .prosseguirPerguntas {
@@ -391,6 +399,7 @@ img {
     border-radius: 15px;
     margin-top: 87px;
     background-color: #EC362D;   
+    cursor: pointer;
 }
 
 .prosseguirPerguntas p {
@@ -400,41 +409,65 @@ img {
     color: #FFF5F4;
 }
 
-.niveis {
-    height: 316px;
-    width: 600px;
+.criar-pergunta {
+    height: auto;
+    padding-top: 27px;
+    overflow-y: hidden;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.criar-pergunta ul.expandir {
+    height: auto;
+}
+
+.criar-pergunta ul {
+    width: 564px;
+    margin: auto;
+    height: 30px;
+    transition: height .3s linear;
+}
+
+.tela3 .criar-pergunta span {
+    margin: 0 0 13px 0;
+    font-size: 20px;
+}
+
+.tela3 .criar-pergunta img {
+    width: 26px;
+    height: 23px;
+}
+
+.criar-pergunta li {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
-    background-color: #ffffff;
-    
+    justify-content: space-between;
+    margin-bottom: 40px;
+    height: auto;
 }
 
-.niveis :nth-child(1) {
-    height: 46px;
-    width: 564px;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 24px;
-    margin-top: 15px;
+.criar-pergunta div:nth-child(1) {
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.niveis input {
-    height: 46px;
-    width: 564px;
-    font-weight: 400;
-    font-style: italic;
-    font-size: 19px;
-    color:#BABABA;
-    background: #FFFFFF;
-    border: 1px solid #D1D1D1;
-    border-radius: 5px;
-    padding-left: 24px;
-    margin-bottom: 15px;
+.criar-pergunta input {
+    margin-top: 12px;
 }
+
+.criar-pergunta li div {
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.criar-pergunta ul.expandir li div {
+    height: auto;
+    margin-bottom: 20px;
+}
+
+
 
 @media (max-width: 1100px){
 
