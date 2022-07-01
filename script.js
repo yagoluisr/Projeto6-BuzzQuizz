@@ -331,7 +331,7 @@ function verificarDados(){
 
 function verificarTitulo(titulo){
 
-    if(titulo.length > 20 && titulo.length < 65){
+    if(titulo.length >= 20 && titulo.length <= 65){
         
         return true;
     }    
@@ -435,10 +435,15 @@ function expandirPergunta(id) {
     let imgJaSelecionada = document.querySelector(".expandir img");
 
     if (jaSelecionada !== null) {
+        jaSelecionada.classList.remove("expandir");
+        imgJaSelecionada.classList.remove("escondido");
+    }
+
+    perguntaSelecionada.classList.add("expandir");
+    imgPerguntaSelecionada.classList.add("escondido");
+
+    if (jaSelecionada === perguntaSelecionada) {
         jaSelecionada.classList.toggle("expandir");
         imgJaSelecionada.classList.toggle("escondido");
     }
-    
-    perguntaSelecionada.classList.add("expandir");
-    imgPerguntaSelecionada.classList.add("escondido");
 }
