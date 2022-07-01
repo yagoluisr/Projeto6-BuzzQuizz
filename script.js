@@ -450,6 +450,7 @@ function expandirPergunta(id) {
 
 function renderizarNiveis(){
     let niveis = 3;
+    
     conteudoTela.innerHTML = '';
 
     conteudoTela.innerHTML += `
@@ -480,6 +481,7 @@ function inserirNiveis(niveis) {
                 <span>Nivel ${i}</span>
                 <img src="./Img/Editar.svg">
                 </div>
+                <div></div>
                 <input type="text" placeholder="Título do nível">
                 <input type="text" placeholder="% de acerto mínima">
                 <input type="text" placeholder="URL da imagem do nível">
@@ -490,36 +492,60 @@ function inserirNiveis(niveis) {
     }
 }
 
-// function expandirPergunta(id) {
-//     let perguntaSelecionada = document.querySelector(`.pergunta${id}`);
-//     let imgPerguntaSelecionada = document.querySelector(`.pergunta${id} img`);
-
-//     let jaSelecionada = document.querySelector(".expandir");
-//     let imgJaSelecionada = document.querySelector(".expandir img");
-
-//     if (jaSelecionada !== null) {
-//         jaSelecionada.classList.toggle("expandir");
-//         imgJaSelecionada.classList.toggle("escondido");
-//     }
-    
-//     perguntaSelecionada.classList.add("expandir");
-//     imgPerguntaSelecionada.classList.add("escondido");
-// }
-
 function verificarNivelQuizz(){
+let pergunta = 3;
+let titulo;
+let acertosMin;
+let url;
+let descricao;
 
-    let titulo = document.querySelector(".niveis :nth-child(2)").value;
-    let acertosMin = document.querySelector(".niveis :nth-child(3)").value;
-    let url = document.querySelector(".niveis :nth-child(4)").value;
-    let descricao = document.querySelector(".niveis :nth-child(5)").value;
+    let check = false;
 
-    console.log(Titulo_nivel(titulo));
-    console.log(PorCento_nivel(acertosMin));
-    console.log(Url_niveis(url));
-    console.log(Descricao_niveis(descricao));
+    for(let i = 1; i <= pergunta; i++){
 
-    if(Titulo_nivel(titulo) !== true || PorCento_nivel(acertosMin) !== true || Url_niveis(url) !== true || Descricao_niveis(descricao) !== true ){
-        alert("Atenção, uns dos dados está inválido");
+        titulo = document.querySelector(`.pergunta${i} :nth-child(3)`).value;
+        acertosMin = document.querySelector(`.pergunta${i} :nth-child(4)`).value;
+        url = document.querySelector(`.pergunta${i} :nth-child(5)`).value;
+        descricao = document.querySelector(`.pergunta${i} :nth-child(6)`).value;
+
+        if(acertosMin === "0"){
+           check = true;
+        }
+
+        // console.log(titulo);
+        // console.log(acertosMin);
+        // console.log(url);
+        // console.log(descricao);
+
+        // console.log(Titulo_nivel(titulo));
+        // console.log(PorCento_nivel(acertosMin));
+        // console.log(Url_niveis(url));
+        // console.log(Descricao_niveis(descricao));
+
+
+
+        // document.querySelector(`.pergunta1 :nth-child(3)`).value = "auisdiuabsdiubasidubaisubd"
+        // document.querySelector(`.pergunta1 :nth-child(4)`).value = 0
+        // document.querySelector(`.pergunta1 :nth-child(5)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
+        // document.querySelector(`.pergunta1 :nth-child(6)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
+
+        // document.querySelector(`.pergunta2 :nth-child(3)`).value = "auisdiuabsdiubasidubaisubd"
+        // document.querySelector(`.pergunta2 :nth-child(4)`).value = 1
+        // document.querySelector(`.pergunta2 :nth-child(5)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
+        // document.querySelector(`.pergunta2 :nth-child(6)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
+
+        // document.querySelector(`.pergunta3 :nth-child(3)`).value = "auisdiuabsdiubasidubaisubd"
+        // document.querySelector(`.pergunta3 :nth-child(4)`).value = 2
+        // document.querySelector(`.pergunta3 :nth-child(5)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
+        // document.querySelector(`.pergunta3 :nth-child(6)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
+
+
+        if(Titulo_nivel(titulo) !== true || PorCento_nivel(acertosMin) !== true || Url_niveis(url) !== true || Descricao_niveis(descricao) !== true ){
+            alert("Atenção, uns dos dados está inválido");
+        }
+    }
+    if(check === false){
+        alert("As está inválido");
     }
 }
 
