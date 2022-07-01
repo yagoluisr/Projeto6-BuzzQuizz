@@ -522,24 +522,6 @@ let descricao;
         // console.log(Url_niveis(url));
         // console.log(Descricao_niveis(descricao));
 
-
-
-        // document.querySelector(`.pergunta1 :nth-child(3)`).value = "auisdiuabsdiubasidubaisubd"
-        // document.querySelector(`.pergunta1 :nth-child(4)`).value = 0
-        // document.querySelector(`.pergunta1 :nth-child(5)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
-        // document.querySelector(`.pergunta1 :nth-child(6)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
-
-        // document.querySelector(`.pergunta2 :nth-child(3)`).value = "auisdiuabsdiubasidubaisubd"
-        // document.querySelector(`.pergunta2 :nth-child(4)`).value = 1
-        // document.querySelector(`.pergunta2 :nth-child(5)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
-        // document.querySelector(`.pergunta2 :nth-child(6)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
-
-        // document.querySelector(`.pergunta3 :nth-child(3)`).value = "auisdiuabsdiubasidubaisubd"
-        // document.querySelector(`.pergunta3 :nth-child(4)`).value = 2
-        // document.querySelector(`.pergunta3 :nth-child(5)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
-        // document.querySelector(`.pergunta3 :nth-child(6)`).value = "https://www.youtube.com/watch?v=kcl87gRy07w&t=49s"
-
-
         if(Titulo_nivel(titulo) !== true || PorCento_nivel(acertosMin) !== true || Url_niveis(url) !== true || Descricao_niveis(descricao) !== true ){
             alert("Atenção, uns dos dados está inválido");
         }
