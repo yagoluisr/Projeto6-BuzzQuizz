@@ -9,8 +9,11 @@ let quizzEscolhido;
 let arrayQuizzes;
 
 
+colocarTelaCarregando();
+buscarQuizzes();
+
 function renderizarTela1() {
-    
+
     conteudoTela.innerHTML = `
         <div class="tela1">
             <div class="criarQuizz">
@@ -31,11 +34,7 @@ function renderizarTela1() {
             <div class="galeria"></div>
         </div>
     `;
-
-    buscarQuizzes();
 }
-
-renderizarTela1();
 
 function buscarQuizzes(){
 
@@ -45,6 +44,9 @@ function buscarQuizzes(){
 }
 
 function renderizarQuizzes(resposta){
+
+    renderizarTela1();
+
     arrayQuizzes = resposta.data;
     console.log(arrayQuizzes)
 
@@ -53,7 +55,7 @@ function renderizarQuizzes(resposta){
     for (let i = 0; i < arrayQuizzes.length; i++ ){
 
             galeriaQuizz.innerHTML += `
-            <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id})">
+            <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id}); colocarTelaCarregando()">
                 <img src="${arrayQuizzes[i].image}">
                 <div class="degrade"></div>
                 <span>${arrayQuizzes[i].title}</span>
@@ -257,6 +259,11 @@ function reiniciarVariaveis() {
     idPerguntaAtual = 0;
     pontuacao = 0;
     porcentagem = 0;
+
+    quizzCriado = {};
+    qtdNiveisUsuario;
+    quizzEscolhido;
+    arrayQuizzes;
 }
 
 function retirarClasses() {
@@ -382,7 +389,6 @@ function expandirPergunta(id) {
         imgJaSelecionada.classList.toggle("escondido");
     }
 }
-
 
 function verificarPerguntasCriadas(qtdPerguntas) {
     let perguntas = {questions: []};
@@ -574,6 +580,19 @@ function atualizarQuizzUsuario (elemento, fase) {
 
         console.log(quizzCriado);
     }
+}
+
+function colocarTelaCarregando() {
+    conteudoTela.innerHTML = '';
+
+    conteudoTela.innerHTML = `
+        <div class="telaCarregamento">
+            <div>
+                <img src="./Img/spinner.gif">
+                <p>Carregando</p>
+            </div>
+        </div> 
+    `;
 }
 
 function alertErro() {
