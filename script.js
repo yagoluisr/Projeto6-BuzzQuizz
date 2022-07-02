@@ -4,6 +4,7 @@ let quizzEscolhido;
 let idPerguntaAtual = 0;
 let pontuacao = 0;
 let porcentagem = 0;
+let quizzCriado = {};
 
 
 function renderizarTela1() {
@@ -74,10 +75,10 @@ function exibirCriarQuizz() {
         <span>Comece pelo começo</span>
 
         <div class="infoBasicas">
-            <input type="text" placeholder="Título do seu quizz" class"titulo">
-            <input type="text" placeholder="URL da imagem do seu quizz" class"url">
-            <input type="text" placeholder="Quantidade de perguntas do quizz" class"qtdPerguntas">
-            <input type="text" placeholder="Quantidade de níveis do quizz" class"niveis">
+            <input type="text" placeholder="Título do seu quizz">
+            <input type="text" placeholder="URL da imagem do seu quizz">
+            <input type="text" placeholder="Quantidade de perguntas do quizz">
+            <input type="text" placeholder="Quantidade de níveis do quizz">
         </div>
         <div class="prosseguirPerguntas" onclick = "criarPerguntas()">
             <p>Prosseguir pra criar perguntas</p>
@@ -332,7 +333,6 @@ function verificarDados(){
 function verificarTitulo(titulo){
 
     if(titulo.length >= 20 && titulo.length <= 65){
-        
         return true;
     }    
     return false;
@@ -340,14 +340,12 @@ function verificarTitulo(titulo){
 
 function verificarUrl(string){
         
-        try {
-         let url = new URL(string)
-         return true;
-         //console.log("Valid URL!")
-       } catch(err) {
+    try {
+        let url = new URL(string)
+        return true;
+    } catch(err) {
             return false;   
-        //console.log("Invalid URL!")
-       }
+    }
 }
 
 function verificarPerguntas(perguntas){
@@ -366,8 +364,11 @@ function verificarNiveis(niveis){
     return false;
 }
 
+// **** Tela 3.2 ****
+
 function criarPerguntas() {
     let perguntas = 3;
+    // apagar variavel
 
     conteudoTela.innerHTML = '';
 
@@ -376,7 +377,7 @@ function criarPerguntas() {
             <span>Crie suas perguntas</span>
             <div class="tela-perguntas">
             </div>
-            <div class="prosseguirPerguntas" onclick = "">
+            <div class="prosseguirPerguntas" onclick = "verificarPerguntasCriadas()">
                 <p>Prosseguir para criar níveis</p>
             </div>
         </div>
@@ -399,26 +400,26 @@ function inserirPergunta(perguntas) {
                 </div>
                 <li>
                     <input type="text" placeholder="Texto da pergunta" class="titulo">
-                    <input type="text" placeholder="Cor de fundo da pergunta" class="titulo">
+                    <input type="text" placeholder="Cor de fundo da pergunta" class="cor">
                 </li>
                 <li>
                     <span>Resposta correta</span>
-                    <input type="text" placeholder="Resposta correta" class="titulo">
-                    <input type="text" placeholder="URL da imagem" class="titulo">
+                    <input type="text" placeholder="Resposta correta" class="respostaCorreta">
+                    <input type="text" placeholder="URL da imagem" class="urlCorreta">
                 </li>
                 <li>
                     <span>Respostas incorretas</span>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 1" class="titulo">
-                        <input type="text" placeholder="URL da imagem 1" class="titulo">
+                        <input type="text" placeholder="Resposta incorreta 1" class="resposta1">
+                        <input type="text" placeholder="URL da imagem 1" class="URL1">
                     </div>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 2" class="titulo">
-                        <input type="text" placeholder="URL da imagem 2" class="titulo">
+                        <input type="text" placeholder="Resposta incorreta 2" class="resposta2">
+                        <input type="text" placeholder="URL da imagem 2" class="URL2">
                     </div>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 3" class="titulo">
-                        <input type="text" placeholder="URL da imagem 3" class="titulo">
+                        <input type="text" placeholder="Resposta incorreta 3" class="resposta3">
+                        <input type="text" placeholder="URL da imagem 3" class="URL3">
                     </div>
                 </li>
             </ul>
@@ -446,4 +447,230 @@ function expandirPergunta(id) {
         jaSelecionada.classList.toggle("expandir");
         imgJaSelecionada.classList.toggle("escondido");
     }
+}
+
+
+function verificarPerguntasCriadas() {
+    let perguntas = {questions: []};
+    let verificadas = 0;
+
+    /* substituir '3' do for e do if pela quantidade de perguntas */
+
+    for (let i = 1; i <= 3; i++) {
+
+        let pergunta = document.querySelector(`.tela-perguntas .criar-pergunta:nth-child(${i})`);
+
+        let titulo = pergunta.querySelector(".titulo").value;
+        let cor = pergunta.querySelector(".cor").value;
+        let respostaCorreta = pergunta.querySelector(".respostaCorreta").value;
+        let URLCorreta = pergunta.querySelector(".urlCorreta").value;
+        let resposta1 = pergunta.querySelector(".resposta1").value;
+        let URL1 = pergunta.querySelector(".URL1").value;
+        let resposta2 = pergunta.querySelector(".resposta2").value;
+        let URL2 = pergunta.querySelector(".URL2").value;
+        let resposta3 = pergunta.querySelector(".resposta3").value;
+        let URL3 = pergunta.querySelector(".URL3").value;
+
+        if (ehDadosValidos(titulo, cor, respostaCorreta, resposta1, resposta2, resposta3, URLCorreta, URL1, URL2, URL3)){
+            verificadas++;
+
+            let rsp1 = {
+                image: URLCorreta,
+                text: respostaCorreta,
+                isCorrectAnswer: true
+            }
+
+            let rsp2 = {
+                image: URL1,
+                text: resposta1,
+                isCorrectAnswer: false
+            }
+
+            let rsp3 = {
+                image: URL2,
+                text: resposta2,
+                isCorrectAnswer: false
+            }
+
+            let rsp4 = {
+                image: URL3,
+                text: resposta3,
+                isCorrectAnswer: false
+            }
+
+            let respostas = [rsp1];
+
+            if (rsp2.image !== '' && rsp2.text !== '') {
+                respostas.push(rsp2);
+            }
+            if (rsp3.image !== '' && rsp3.text !== '') {
+                respostas.push(rsp3);
+            }
+            if (rsp4.image !== '' && rsp4.text !== '') {
+                respostas.push(rsp4);
+            }
+
+            let perguntaArray = {
+                answers: respostas,
+                color: cor,
+                title: titulo
+            };
+
+            perguntas.questions.push(perguntaArray);
+        }
+    }
+
+    if (verificadas === 3) {
+        atualizarQuizzUsuario(perguntas.questions, 2);
+    } else {
+        alert("Atenção, dado(s) inválido(s). Por favor, verifique os campos.");
+    }
+}
+
+function ehDadosValidos (titulo, cor, respostaCorreta, resposta1, resposta2, resposta3, URLCorreta, URL1, URL2, URL3) {
+
+    return (ehTituloPerguntasValido(titulo) && ehCorValida(cor) 
+        && ehRespostaValida(respostaCorreta, resposta1, resposta2, resposta3)
+        && verificarUrl(URLCorreta) && (verificarUrl(URL1) || verificarUrl(URL2) || verificarUrl(URL3))
+        && ehCardValido(resposta1, URL1) && ehCardValido(resposta2, URL2) && ehCardValido(resposta3, URL3));
+}
+
+function ehTituloPerguntasValido (string) {
+    if (string.length >= 20) {
+        return true;
+    }
+    return false;
+}
+
+function ehCorValida (cor) {
+    let hex = /^#[0-9A-F]{6}$/i;
+    return (hex.test(cor));
+}
+
+function ehRespostaValida (rCorreta, r1, r2, r3) {
+    return (rCorreta !== '' && (r1 !== '' || r2 !== '' || r3 !== ''));
+}
+
+function ehCardValido (resposta, url) {
+    return ((resposta !== '' && url !== '') || (resposta === '' && url === ''));
+}
+
+function atualizarQuizzUsuario (elemento, fase) {
+    if (fase === 1) {}
+    if (fase === 2) {
+        quizzCriado.questions = elemento;
+    }
+    if (fase === 3) {}
+}
+
+
+// **** Tela 3.3 ****
+
+function renderizarNiveis(){
+    let niveis = 3;
+    // apagar variavel
+
+    conteudoTela.innerHTML = '';
+
+    conteudoTela.innerHTML += `
+    <div class="tela3">
+        <span>Agora, decida os níveis</span>
+        <div class="niveis">
+
+        </div>
+
+        <div class="prosseguirPerguntas" onclick = "verificarNivelQuizz()">
+            <p>Finalizar Quizz</p>
+        </div>
+
+    </div>
+    `
+    inserirNiveis(niveis)
+}
+
+function inserirNiveis(niveis) {
+
+    let tela = document.querySelector(".tela3 .niveis");
+
+    for (let i = 1; i <= niveis; i++) {
+        tela.innerHTML += `
+        <div class="criar-pergunta">
+            <ul class="pergunta${i}">
+                <div onclick="expandirPergunta(${i})">
+                <span>Nivel ${i}</span>
+                <img src="./Img/Editar.svg">
+                </div>
+                <input type="text" placeholder="Título do nível">
+                <input type="text" placeholder="% de acerto mínima">
+                <input type="text" placeholder="URL da imagem do nível">
+                <input type="text" placeholder="Descrição do nível">
+            </ul>
+        </div>
+        `;
+    }
+}
+
+// function expandirPergunta(id) {
+//     let perguntaSelecionada = document.querySelector(`.pergunta${id}`);
+//     let imgPerguntaSelecionada = document.querySelector(`.pergunta${id} img`);
+
+//     let jaSelecionada = document.querySelector(".expandir");
+//     let imgJaSelecionada = document.querySelector(".expandir img");
+
+//     if (jaSelecionada !== null) {
+//         jaSelecionada.classList.toggle("expandir");
+//         imgJaSelecionada.classList.toggle("escondido");
+//     }
+    
+//     perguntaSelecionada.classList.add("expandir");
+//     imgPerguntaSelecionada.classList.add("escondido");
+// }
+
+function verificarNivelQuizz(){
+
+    let titulo = document.querySelector(".niveis :nth-child(2)").value;
+    let acertosMin = document.querySelector(".niveis :nth-child(3)").value;
+    let url = document.querySelector(".niveis :nth-child(4)").value;
+    let descricao = document.querySelector(".niveis :nth-child(5)").value;
+
+    console.log(Titulo_nivel(titulo));
+    console.log(PorCento_nivel(acertosMin));
+    console.log(Url_niveis(url));
+    console.log(Descricao_niveis(descricao));
+
+    if(Titulo_nivel(titulo) !== true || PorCento_nivel(acertosMin) !== true || Url_niveis(url) !== true || Descricao_niveis(descricao) !== true ){
+        alert("Atenção, uns dos dados está inválido");
+    }
+}
+
+function Titulo_nivel(titulo){
+    if(titulo.length > 10){
+        return true;
+    }
+    return false;
+}
+
+function PorCento_nivel(acertosMin) {
+    if(acertosMin >= 0 && acertosMin <= 100 && acertosMin !== ''){
+        return true;
+    }
+    return false;
+}
+
+function Url_niveis(string){
+    try {
+        let url = new URL(string)
+        return true;
+        //console.log("Valid URL!")
+    } catch(err) {
+            return false;   
+        //console.log("Invalid URL!")
+    }
+}
+
+function Descricao_niveis(descricao){
+    if(descricao.length >= 30){
+        return true;
+    }
+    return false;
 }
