@@ -1,13 +1,19 @@
 let conteudoTela = document.querySelector('.conteudo');
-let arrayQuizzes;
-let quizzEscolhido;
 let idPerguntaAtual = 0;
 let pontuacao = 0;
 let porcentagem = 0;
 let meuQuizz = {};
 
+let qtdNiveisUsuario;
+let quizzEscolhido;
+let arrayQuizzes;
+
+
+colocarTelaCarregando();
+buscarQuizzes();
 
 function renderizarTela1() {
+
     conteudoTela.innerHTML = `
         <div class="tela1">
             <div class="criarQuizz">
@@ -28,11 +34,7 @@ function renderizarTela1() {
             <div class="galeria"></div>
         </div>
     `;
-
-    buscarQuizzes();
 }
-
-renderizarTela1();
 
 function buscarQuizzes(){
 
@@ -42,6 +44,9 @@ function buscarQuizzes(){
 }
 
 function renderizarQuizzes(resposta){
+
+    renderizarTela1();
+
     arrayQuizzes = resposta.data;
     console.log(arrayQuizzes)
 
@@ -50,7 +55,7 @@ function renderizarQuizzes(resposta){
     for (let i = 0; i < arrayQuizzes.length; i++ ){
 
             galeriaQuizz.innerHTML += `
-            <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id})">
+            <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id}); colocarTelaCarregando()">
                 <img src="${arrayQuizzes[i].image}">
                 <div class="degrade"></div>
                 <span>${arrayQuizzes[i].title}</span>
@@ -71,25 +76,21 @@ function exibirCriarQuizz() {
     conteudoTela.innerHTML = '';
 
     conteudoTela.innerHTML += `
-    <div class="tela3">
-        <span>Comece pelo começo</span>
+        <div class="tela3">
+            <span>Comece pelo começo</span>
 
-        <div class="infoBasicas">
-            <input type="text" placeholder="Título do seu quizz">
-            <input type="text" placeholder="URL da imagem do seu quizz">
-            <input type="text" placeholder="Quantidade de perguntas do quizz">
-            <input type="text" placeholder="Quantidade de níveis do quizz">
+            <div class="infoBasicas">
+                <input type="text" placeholder="Título do seu quizz">
+                <input type="text" placeholder="URL da imagem do seu quizz">
+                <input type="text" placeholder="Quantidade de perguntas do quizz">
+                <input type="text" placeholder="Quantidade de níveis do quizz">
+            </div>
+            <div class="prosseguirPerguntas" onclick="verificarDados()">
+                <p>Prosseguir para criar perguntas</p>
+            </div>
         </div>
-        <div class="prosseguirPerguntas" onclick = "criarPerguntas()">
-            <p>Prosseguir pra criar perguntas</p>
-        </div>
-    </div>
     `;
-
-    //onclick="verificarDados()"
 }
-
-
 
 function exibirQuizz(objeto) {
     
@@ -97,12 +98,12 @@ function exibirQuizz(objeto) {
 
     conteudoTela.innerHTML = '';
 
-    gerarBanner(quizzEscolhido);
+    gerarBanner();
 
-    gerarPerguntas(quizzEscolhido);
+    gerarPerguntas();
 }
 
-function gerarBanner(quizzEscolhido) {
+function gerarBanner() {
     conteudoTela.innerHTML += `
         <div>
             <div class="bannerQuizz">
@@ -113,7 +114,7 @@ function gerarBanner(quizzEscolhido) {
     `;
 }
 
-function gerarPerguntas(quizzEscolhido) {
+function gerarPerguntas() {
     for (let i = 0; i < quizzEscolhido.questions.length; i++) {
         
         conteudoTela.innerHTML += `
@@ -125,7 +126,7 @@ function gerarPerguntas(quizzEscolhido) {
             </div>
         </div>`;
         
-        gerarOpcoes(quizzEscolhido, i);
+        gerarOpcoes(i);
         document.querySelector(`.pergunta${i}`).style.backgroundColor = `${quizzEscolhido.questions[i].color}`;
     }
 
@@ -136,7 +137,7 @@ function gerarPerguntas(quizzEscolhido) {
     gerarBotoes();
 }
 
-function gerarOpcoes(quizzEscolhido, idQuestions) {
+function gerarOpcoes(idQuestions) {
     let divOpcoes = document.querySelector(`.conteudo .opcoes${idQuestions}`);
 
     let respostas = quizzEscolhido.questions[idQuestions].answers;
@@ -258,6 +259,11 @@ function reiniciarVariaveis() {
     idPerguntaAtual = 0;
     pontuacao = 0;
     porcentagem = 0;
+
+    quizzCriado = {};
+    qtdNiveisUsuario;
+    quizzEscolhido;
+    arrayQuizzes;
 }
 
 function retirarClasses() {
@@ -276,101 +282,34 @@ function retirarClasses() {
     document.querySelector(".botoes").classList.add("escondido");
 }
 
-function ehPerguntaAtual(opcao) {
-    let perguntaAtual = opcao.parentNode.parentNode.querySelector(`.perguntas.pergunta${idPerguntaAtual}`);
-    
-    if (perguntaAtual !== null) {
-        idPerguntaAtual++;
-
-        let novaPerguntaAtual = document.querySelector(`.pergunta${idPerguntaAtual}`);
-
-        setTimeout(function(){
-
-            if (idPerguntaAtual === quizzEscolhido.questions.length) {
-                gerarCaixaResultado();
-                document.querySelector(".caixa-resultado").classList.remove("escondido");
-                document.querySelector(".botoes").classList.remove("escondido");
-
-                document.querySelector(".caixa-resultado").scrollIntoView({behavior: "smooth"});
-            } else {
-                novaPerguntaAtual.parentNode.scrollIntoView({behavior: "smooth"});
-            }
-            
-        }, 2000);
-
-        return perguntaAtual;
-    }
-}
-
-function recarregarPagina() {
-    window.location.reload();
-}
-
-function embaralhar() {
-    return Math.random() -0.5;
-}
-
-// ***** Tela 3 ****
-
-
-function verificarDados(){
+function verificarDados() {
 
     let titulo = document.querySelector(".infoBasicas :nth-child(1)").value;
     let url = document.querySelector(".infoBasicas :nth-child(2)").value;
     let perguntas = document.querySelector(".infoBasicas :nth-child(3)").value;
     let niveis = document.querySelector(".infoBasicas :nth-child(4)").value;
 
-    console.log(verificarTitulo(titulo));
-    console.log(verificarUrl(url));
-    console.log(verificarPerguntas(perguntas));
-    console.log(verificarNiveis(niveis));
+    if (ehDadosBasicosValidos(titulo, url, perguntas, niveis)){
 
-    if(verificarTitulo(titulo) !== true || verificarUrl(url) !== true || verificarPerguntas(perguntas) !== true || verificarNiveis(niveis) !== true ){
-        alert("Atenção, dado(s) inválido(s). Por favor, verifique os campos.");
+        let qtdPerguntas = Number(perguntas);
+        qtdNiveisUsuario = Number(niveis);
+
+        let informacoesBasicas = {
+            image: url,
+            title: titulo
+        };
+
+        atualizarQuizzUsuario(informacoesBasicas, 1);
+
+        criarPerguntas(qtdPerguntas);
+
+    } else {
+        alertErro();
     }
 }
 
-function verificarTitulo(titulo){
-
-    if(titulo.length > 20 && titulo.length < 65){
-        
-        return true;
-    }    
-    return false;
-}
-
-function verificarUrl(string){
-        
-    try {
-        let url = new URL(string)
-        return true;
-        //console.log("Valid URL!")
-    } catch(err) {
-            return false;   
-        //console.log("Invalid URL!")
-    }
-}
-
-function verificarPerguntas(perguntas){
-    
-    if(perguntas >= 3){
-        return true;
-    }
-    return false;
-}
-
-function verificarNiveis(niveis){
-   
-    if(niveis >= 2){
-        return true;
-    }
-    return false;
-}
-
-// **** Tela 3.2 ****
-
-function criarPerguntas() {
-    let perguntas = 3;
+function criarPerguntas(qtdPerguntas) {
+    let perguntas = qtdPerguntas;
 
     conteudoTela.innerHTML = '';
 
@@ -379,12 +318,12 @@ function criarPerguntas() {
             <span>Crie suas perguntas</span>
             <div class="tela-perguntas">
             </div>
-            <div class="prosseguirPerguntas" onclick = "renderizarNiveis()">
+            <div class="prosseguirPerguntas" onclick="verificarPerguntasCriadas(${qtdPerguntas})">
                 <p>Prosseguir para criar níveis</p>
             </div>
         </div>
     `;
-
+    
     inserirPergunta(perguntas);
 }
 
@@ -441,123 +380,340 @@ function expandirPergunta(id) {
         jaSelecionada.classList.toggle("expandir");
         imgJaSelecionada.classList.toggle("escondido");
     }
-    
-    perguntaSelecionada.classList.add("expandir");
-    imgPerguntaSelecionada.classList.add("escondido");
 }
 
+function verificarPerguntasCriadas(qtdPerguntas) {
+    let perguntas = {questions: []};
+    let verificadas = 0;
 
-// **** Tela 3.3 ****
+    for (let i = 1; i <= qtdPerguntas; i++) {
+
+        let pergunta = document.querySelector(`.tela-perguntas .criar-pergunta:nth-child(${i})`);
+
+        let titulo = pergunta.querySelector(".titulo").value;
+        let cor = pergunta.querySelector(".cor").value;
+        let respostaCorreta = pergunta.querySelector(".respostaCorreta").value;
+        let URLCorreta = pergunta.querySelector(".urlCorreta").value;
+        let resposta1 = pergunta.querySelector(".resposta1").value;
+        let URL1 = pergunta.querySelector(".URL1").value;
+        let resposta2 = pergunta.querySelector(".resposta2").value;
+        let URL2 = pergunta.querySelector(".URL2").value;
+        let resposta3 = pergunta.querySelector(".resposta3").value;
+        let URL3 = pergunta.querySelector(".URL3").value;
+
+        if (ehDadosRespostasValidos(titulo, cor, respostaCorreta, resposta1, resposta2, resposta3, URLCorreta, URL1, URL2, URL3)){
+            verificadas++;
+
+            let rsp1 = {
+                image: URLCorreta,
+                text: respostaCorreta,
+                isCorrectAnswer: true
+            }
+
+            let rsp2 = {
+                image: URL1,
+                text: resposta1,
+                isCorrectAnswer: false
+            }
+
+            let rsp3 = {
+                image: URL2,
+                text: resposta2,
+                isCorrectAnswer: false
+            }
+
+            let rsp4 = {
+                image: URL3,
+                text: resposta3,
+                isCorrectAnswer: false
+            }
+
+            let respostas = [rsp1];
+
+            if (rsp2.image !== '' && rsp2.text !== '') {
+                respostas.push(rsp2);
+            }
+            if (rsp3.image !== '' && rsp3.text !== '') {
+                respostas.push(rsp3);
+            }
+            if (rsp4.image !== '' && rsp4.text !== '') {
+                respostas.push(rsp4);
+            }
+
+            let perguntaArray = {
+                answers: respostas,
+                color: cor,
+                title: titulo
+            };
+
+            perguntas.questions.push(perguntaArray);
+        }
+    }
+
+    
+    if (verificadas === qtdPerguntas) {
+        atualizarQuizzUsuario(perguntas.questions, 2);
+
+
+        console.log('nivel:' + qtdNiveisUsuario)
+        renderizarNiveis();
+    } else {
+        alertErro();
+    }
+}
 
 function renderizarNiveis(){
-    let niveis = 3;
-    
+
     conteudoTela.innerHTML = '';
 
     conteudoTela.innerHTML += `
     <div class="tela3">
         <span>Agora, decida os níveis</span>
-        <div class="niveis">
-
-        </div>
-
-        <div class="prosseguirPerguntas" onclick = "verificarNivelQuizz()">
+        <div class="niveis"></div>
+        <div class="prosseguirPerguntas" onclick="verificarNivelQuizz()">
             <p>Finalizar Quizz</p>
         </div>
 
     </div>
-    `
-    inserirNiveis(niveis)
+    `;
+
+    inserirNiveis();
 }
 
-function inserirNiveis(niveis) {
+function inserirNiveis() {
 
     let tela = document.querySelector(".tela3 .niveis");
 
-    for (let i = 1; i <= niveis; i++) {
+    for (let i = 1; i <= qtdNiveisUsuario; i++) {
         tela.innerHTML += `
-        <div class="criar-pergunta">
-            <ul class="pergunta${i}">
-                <div onclick="expandirPergunta(${i})">
-                <span>Nivel ${i}</span>
-                <img src="./Img/Editar.svg">
-                </div>
-                <div></div>
-                <input type="text" placeholder="Título do nível">
-                <input type="text" placeholder="% de acerto mínima">
-                <input type="text" placeholder="URL da imagem do nível">
-                <input type="text" placeholder="Descrição do nível">
-            </ul>
-        </div>
+            <div class="criar-pergunta">
+                <ul class="pergunta${i} nivel">
+                    <div onclick="expandirPergunta(${i})">
+                        <span>Nivel ${i}</span>
+                        <img src="./Img/Editar.svg">
+                    </div>
+                    <div></div>
+                    <input type="text" placeholder="Título do nível">
+                    <input type="text" placeholder="% de acerto mínima">
+                    <input type="text" placeholder="URL da imagem do nível">
+                    <input type="text" placeholder="Descrição do nível">
+                </ul>
+            </div>
         `;
     }
 }
 
-function verificarNivelQuizz(){
-let pergunta = 3;
-let titulo;
-let acertosMin;
-let url;
-let descricao;
+function verificarNivelQuizz () {
+
+    let titulo;
+    let acertosMin;
+    let url;
+    let descricao;
+    let verificadas = 0;
+
+    let niveis = {levels: []};
+    let nivel;
 
     let check = false;
 
-    for(let i = 1; i <= pergunta; i++){
+    for(let i = 1; i <= qtdNiveisUsuario; i++){
 
         titulo = document.querySelector(`.pergunta${i} :nth-child(3)`).value;
         acertosMin = document.querySelector(`.pergunta${i} :nth-child(4)`).value;
         url = document.querySelector(`.pergunta${i} :nth-child(5)`).value;
         descricao = document.querySelector(`.pergunta${i} :nth-child(6)`).value;
 
-        if(acertosMin === "0"){
+        if (acertosMin === "0"){
            check = true;
         }
 
-        // console.log(titulo);
-        // console.log(acertosMin);
-        // console.log(url);
-        // console.log(descricao);
+        if (ehDadosNiveisValidos (titulo, acertosMin, url, descricao)) {
+            verificadas++;
 
-        // console.log(Titulo_nivel(titulo));
-        // console.log(PorCento_nivel(acertosMin));
-        // console.log(Url_niveis(url));
-        // console.log(Descricao_niveis(descricao));
+            nivel = {
+                image: url,
+                minValue: acertosMin,
+                text: descricao,
+                title: titulo
+            }
 
-        if(Titulo_nivel(titulo) !== true || PorCento_nivel(acertosMin) !== true || Url_niveis(url) !== true || Descricao_niveis(descricao) !== true ){
-            alert("Atenção, uns dos dados está inválido");
+            niveis.levels.push(nivel);
+        } else {
+            alertErro();
         }
     }
+
     if(check === false){
-        alert("Atenção, uns dos dados está inválido");
+        alertErro();
+    } else {
+
+        if (verificadas === qtdNiveisUsuario) {
+            atualizarQuizzUsuario(niveis.levels, 3);
+        } else {
+            alertErro();
+        }
     }
 }
 
-function Titulo_nivel(titulo){
+function atualizarQuizzUsuario (elemento, fase) {
+    if (fase === 1) {
+        quizzCriado.image = elemento.image;
+        quizzCriado.title = elemento.title;
+
+        console.log(quizzCriado);
+    }
+    if (fase === 2) {
+        quizzCriado.questions = elemento;
+
+        console.log(quizzCriado);
+    }
+    if (fase === 3) {
+        quizzCriado.levels = elemento;
+
+        console.log(quizzCriado);
+    }
+}
+
+function colocarTelaCarregando() {
+    conteudoTela.innerHTML = '';
+
+    conteudoTela.innerHTML = `
+        <div class="telaCarregamento">
+            <div>
+                <img src="./Img/spinner.gif">
+                <p>Carregando</p>
+            </div>
+        </div> 
+    `;
+}
+
+function alertErro() {
+    alert("Atenção, dado(s) inválido(s). Por favor, verifique os campos.");   
+}
+
+function recarregarPagina() {
+    window.location.reload();
+}
+
+function embaralhar() {
+    return Math.random() -0.5;
+}
+
+function ehPerguntaAtual(opcao) {
+    let perguntaAtual = opcao.parentNode.parentNode.querySelector(`.perguntas.pergunta${idPerguntaAtual}`);
+    
+    if (perguntaAtual !== null) {
+        idPerguntaAtual++;
+
+        let novaPerguntaAtual = document.querySelector(`.pergunta${idPerguntaAtual}`);
+
+        setTimeout(function(){
+
+            if (idPerguntaAtual === quizzEscolhido.questions.length) {
+                gerarCaixaResultado();
+                document.querySelector(".caixa-resultado").classList.remove("escondido");
+                document.querySelector(".botoes").classList.remove("escondido");
+
+                document.querySelector(".caixa-resultado").scrollIntoView({behavior: "smooth"});
+            } else {
+                novaPerguntaAtual.parentNode.scrollIntoView({behavior: "smooth"});
+            }
+            
+        }, 2000);
+
+        return perguntaAtual;
+    }
+}
+
+function ehDadosBasicosValidos (titulo, url, perguntas, niveis) {
+    return (ehTituloDadosBasicosValido(titulo) === true && ehUrlValida(url) === true
+        && ehQtdPerguntasValida(perguntas) === true && ehQtdNiveisValidos(niveis) === true);
+}
+
+function ehTituloDadosBasicosValido(titulo){
+
+    if(titulo.length >= 20 && titulo.length <= 65){
+        return true;
+    }    
+    return false;
+}
+
+function ehUrlValida(string){
+        
+    try {
+        let url = new URL(string)
+        return true;
+    } catch(err) {
+            return false;   
+    }
+}
+
+function ehQtdPerguntasValida(perguntas){
+    
+    if(perguntas >= 3){
+        return true;
+    }
+    return false;
+}
+
+function ehQtdNiveisValidos(niveis){
+   
+    if(niveis >= 2){
+        return true;
+    }
+    return false;
+}
+
+function ehDadosRespostasValidos (titulo, cor, respostaCorreta, resposta1, resposta2, resposta3, URLCorreta, URL1, URL2, URL3) {
+    
+    return (ehTituloPerguntasValido(titulo) && ehCorValida(cor) 
+        && ehRespostaValida(respostaCorreta, resposta1, resposta2, resposta3)
+        && ehUrlValida(URLCorreta) && (ehUrlValida(URL1) || ehUrlValida(URL2) || ehUrlValida(URL3))
+        && ehCardValido(resposta1, URL1) && ehCardValido(resposta2, URL2) && ehCardValido(resposta3, URL3));
+}
+
+function ehTituloPerguntasValido (string) {
+    if (string.length >= 20) {
+        return true;
+    }
+    return false;
+}
+
+function ehCorValida (cor) {
+    let hex = /^#[0-9A-F]{6}$/i;
+    return (hex.test(cor));
+}
+
+function ehRespostaValida (rCorreta, r1, r2, r3) {
+    return (rCorreta !== '' && (r1 !== '' || r2 !== '' || r3 !== ''));
+}
+
+function ehCardValido (resposta, url) {
+    return ((resposta !== '' && url !== '') || (resposta === '' && url === ''));
+}
+
+function ehDadosNiveisValidos (titulo, acertosMin, url, descricao) {
+    return (ehTituloNivelValido(titulo) === true
+        && ehPorcentagemNivelValida(acertosMin) === true
+        && ehUrlValida(url) === true
+        && ehDescricaoNiveisValida(descricao) === true)
+}
+
+function ehTituloNivelValido(titulo){
     if(titulo.length > 10){
         return true;
     }
     return false;
 }
 
-function PorCento_nivel(acertosMin) {
+function ehPorcentagemNivelValida(acertosMin) {
     if(acertosMin >= 0 && acertosMin <= 100 && acertosMin !== ''){
         return true;
     }
     return false;
 }
 
-function Url_niveis(string){
-    try {
-        let url = new URL(string)
-        return true;
-        //console.log("Valid URL!")
-    } catch(err) {
-            return false;   
-        //console.log("Invalid URL!")
-    }
-}
-
-function Descricao_niveis(descricao){
+function ehDescricaoNiveisValida(descricao){
     if(descricao.length >= 30){
         return true;
     }
