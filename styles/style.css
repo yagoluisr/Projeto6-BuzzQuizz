@@ -420,7 +420,7 @@ img {
 }
 
 .criar-pergunta ul.expandir {
-    height: auto;
+    height: 820px;
 }
 
 .criar-pergunta ul {
@@ -467,6 +467,10 @@ img {
 .criar-pergunta ul.expandir li div {
     height: auto;
     margin-bottom: 20px;
+}
+
+.criar-pergunta ul.expandir.nivel {
+    height: 275px;
 }
 
 
