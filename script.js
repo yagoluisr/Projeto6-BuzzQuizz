@@ -246,7 +246,10 @@ function verificarNivel() {
 
 function irHome() {
     conteudoTela.innerHTML = '';
-    renderizarTela1();
+
+    reiniciarVariaveis();
+    colocarTelaCarregando();
+    buscarQuizzes();
 }
 
 function reiniciarQuizz() {
@@ -461,9 +464,6 @@ function verificarPerguntasCriadas(qtdPerguntas) {
     
     if (verificadas === qtdPerguntas) {
         atualizarQuizzUsuario(perguntas.questions, 2);
-
-
-        console.log('nivel:' + qtdNiveisUsuario)
         renderizarNiveis();
     } else {
         alertErro();
@@ -540,7 +540,7 @@ function verificarNivelQuizz () {
 
             nivel = {
                 image: url,
-                minValue: acertosMin,
+                minValue: Number(acertosMin),
                 text: descricao,
                 title: titulo
             }
@@ -556,6 +556,7 @@ function verificarNivelQuizz () {
     } else {
 
         if (verificadas === qtdNiveisUsuario) {
+            colocarTelaCarregando();
             atualizarQuizzUsuario(niveis.levels, 3);
         } else {
             alertErro();
@@ -567,19 +568,66 @@ function atualizarQuizzUsuario (elemento, fase) {
     if (fase === 1) {
         quizzCriado.image = elemento.image;
         quizzCriado.title = elemento.title;
-
-        console.log(quizzCriado);
     }
     if (fase === 2) {
         quizzCriado.questions = elemento;
-
-        console.log(quizzCriado);
     }
     if (fase === 3) {
         quizzCriado.levels = elemento;
-
-        console.log(quizzCriado);
+        enviarQuizz();
     }
+}
+
+function enviarQuizz() {
+    let promise = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizzCriado);
+    promise.catch(alertErro);
+    promise.then(armazenarIdUsuario);
+}
+
+function armazenarIdUsuario(elemento) {
+    let id = elemento.data.id;
+
+    let lista = [id];
+
+    if (localStorage.getItem("listaID") !== null) {
+        let listaSerializada = localStorage.getItem("listaID");
+        let idsArmazenados = JSON.parse(listaSerializada);
+
+        idsArmazenados.push(id)
+
+        listaSerializada = JSON.stringify(idsArmazenados);
+        localStorage.removeItem("listaID");
+        localStorage.setItem("listaID", listaSerializada);
+    } else {
+        lista = JSON.stringify(lista);
+        localStorage.setItem("listaID", lista);
+    }
+
+    resumoQuizz(elemento.data);
+}
+
+function resumoQuizz(elemento) {
+
+    conteudoTela.innerHTML = '';
+
+    conteudoTela.innerHTML = `
+    <div class="tela3">
+        <span>Seu quizz está pronto!</span>
+        <div class="MeuQuizz">
+                <img src="${elemento.image}">
+                <div class="degrade2"></div>
+                <span>${elemento.title}</span>
+        </div>
+
+        <div class="prosseguirPerguntas" onclick = "verificarNivelQuizz()">
+            <p>Acessar quizz</p>
+        </div>
+        <br>
+        <div class="voltar-home" onclick="irHome()">
+            <p>Volta para home</p>
+        </div>
+    </div>        
+    `
 }
 
 function colocarTelaCarregando() {
@@ -701,10 +749,10 @@ function ehCardValido (resposta, url) {
 }
 
 function ehDadosNiveisValidos (titulo, acertosMin, url, descricao) {
-    return (ehTituloNivelValido(titulo) === true
-        && ehPorcentagemNivelValida(acertosMin) === true
-        && ehUrlValida(url) === true
-        && ehDescricaoNiveisValida(descricao) === true)
+    return (ehTituloNivelValido(titulo)
+        && ehPorcentagemNivelValida(acertosMin)
+        && ehUrlValida(url)
+        && ehDescricaoNiveisValida(descricao))
 }
 
 function ehTituloNivelValido(titulo){
