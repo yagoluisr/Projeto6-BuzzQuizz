@@ -346,26 +346,26 @@ function inserirPergunta(perguntas) {
                 </div>
                 <li>
                     <input type="text" placeholder="Texto da pergunta" class="titulo">
-                    <input type="text" placeholder="Cor de fundo da pergunta" class="titulo">
+                    <input type="text" placeholder="Cor de fundo da pergunta" class="cor">
                 </li>
                 <li>
                     <span>Resposta correta</span>
-                    <input type="text" placeholder="Resposta correta" class="titulo">
-                    <input type="text" placeholder="URL da imagem" class="titulo">
+                    <input type="text" placeholder="Resposta correta" class="respostaCorreta">
+                    <input type="text" placeholder="URL da imagem" class="urlCorreta">
                 </li>
                 <li>
                     <span>Respostas incorretas</span>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 1" class="titulo">
-                        <input type="text" placeholder="URL da imagem 1" class="titulo">
+                        <input type="text" placeholder="Resposta incorreta 1" class="resposta1">
+                        <input type="text" placeholder="URL da imagem 1" class="URL1">
                     </div>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 2" class="titulo">
-                        <input type="text" placeholder="URL da imagem 2" class="titulo">
+                        <input type="text" placeholder="Resposta incorreta 2" class="resposta2">
+                        <input type="text" placeholder="URL da imagem 2" class="URL2">
                     </div>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 3" class="titulo">
-                        <input type="text" placeholder="URL da imagem 3" class="titulo">
+                        <input type="text" placeholder="Resposta incorreta 3" class="resposta3">
+                        <input type="text" placeholder="URL da imagem 3" class="URL3">
                     </div>
                 </li>
             </ul>
