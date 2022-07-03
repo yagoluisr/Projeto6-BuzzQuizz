@@ -54,7 +54,7 @@ function renderizarQuizzes(resposta){
 
     let galeriaQuizz = document.querySelector(".todosQuizzes .galeria");
     
-    for (let i = 0; i < arrayQuizzes.length; i++ ){
+    for (let i = 0; i < arrayQuizzes.length; i++){
 
             galeriaQuizz.innerHTML += `
             <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id}); colocarTelaCarregando()">
@@ -260,7 +260,6 @@ function reiniciarQuizz() {
     document.querySelector(".bannerQuizz").scrollIntoView({behavior: "smooth"});
 }
 
-
 function reiniciarVariaveis() {
     idPerguntaAtual = 0;
     pontuacao = 0;
@@ -347,26 +346,26 @@ function inserirPergunta(perguntas) {
                 </div>
                 <li>
                     <input type="text" placeholder="Texto da pergunta" class="titulo">
-                    <input type="text" placeholder="Cor de fundo da pergunta" class="titulo">
+                    <input type="text" placeholder="Cor de fundo da pergunta" class="cor">
                 </li>
                 <li>
                     <span>Resposta correta</span>
-                    <input type="text" placeholder="Resposta correta" class="titulo">
-                    <input type="text" placeholder="URL da imagem" class="titulo">
+                    <input type="text" placeholder="Resposta correta" class="respostaCorreta">
+                    <input type="text" placeholder="URL da imagem" class="urlCorreta">
                 </li>
                 <li>
                     <span>Respostas incorretas</span>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 1" class="titulo">
-                        <input type="text" placeholder="URL da imagem 1" class="titulo">
+                        <input type="text" placeholder="Resposta incorreta 1" class="resposta1">
+                        <input type="text" placeholder="URL da imagem 1" class="URL1">
                     </div>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 2" class="titulo">
-                        <input type="text" placeholder="URL da imagem 2" class="titulo">
+                        <input type="text" placeholder="Resposta incorreta 2" class="resposta2">
+                        <input type="text" placeholder="URL da imagem 2" class="URL2">
                     </div>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 3" class="titulo">
-                        <input type="text" placeholder="URL da imagem 3" class="titulo">
+                        <input type="text" placeholder="Resposta incorreta 3" class="resposta3">
+                        <input type="text" placeholder="URL da imagem 3" class="URL3">
                     </div>
                 </li>
             </ul>
@@ -383,6 +382,14 @@ function expandirPergunta(id) {
     let imgJaSelecionada = document.querySelector(".expandir img");
 
     if (jaSelecionada !== null) {
+        jaSelecionada.classList.remove("expandir");
+        imgJaSelecionada.classList.remove("escondido");
+    }
+
+    perguntaSelecionada.classList.add("expandir");
+    imgPerguntaSelecionada.classList.add("escondido");
+
+    if (jaSelecionada === perguntaSelecionada) {
         jaSelecionada.classList.toggle("expandir");
         imgJaSelecionada.classList.toggle("escondido");
     }
@@ -459,9 +466,6 @@ function verificarPerguntasCriadas(qtdPerguntas) {
     
     if (verificadas === qtdPerguntas) {
         atualizarQuizzUsuario(perguntas.questions, 2);
-
-
-        console.log('nivel:' + qtdNiveisUsuario)
         renderizarNiveis();
     } else {
         alertErro();
@@ -554,6 +558,7 @@ function verificarNivelQuizz () {
     } else {
 
         if (verificadas === qtdNiveisUsuario) {
+            colocarTelaCarregando();
             atualizarQuizzUsuario(niveis.levels, 3);
         } else {
             alertErro();
@@ -571,24 +576,24 @@ function atualizarQuizzUsuario (elemento, fase) {
     }
     if (fase === 3) {
         quizzCriado.levels = elemento;
-
-        console.log(quizzCriado);
+        enviarQuizz();
     }
 }
 
 function enviarQuizz() {
     let promise = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizzCriado);
+    promise.catch(alertErro);
     promise.then(armazenarIdUsuario);
 }
 
 function armazenarIdUsuario(elemento) {
-    let id = elemento.id;
+    let id = elemento.data.id;
 
     let lista = [id];
 
     if (localStorage.getItem("listaID") !== null) {
-        const listaSerializada = localStorage.getItem("listaID");
-        const idsArmazenados = JSON.parse(listaSerializada);
+        let listaSerializada = localStorage.getItem("listaID");
+        let idsArmazenados = JSON.parse(listaSerializada);
 
         idsArmazenados.push(id)
 
@@ -599,6 +604,32 @@ function armazenarIdUsuario(elemento) {
         lista = JSON.stringify(lista);
         localStorage.setItem("listaID", lista);
     }
+
+    resumoQuizz(elemento.data);
+}
+
+function resumoQuizz(elemento) {
+
+    conteudoTela.innerHTML = '';
+
+    conteudoTela.innerHTML = `
+    <div class="tela3">
+        <span>Seu quizz está pronto!</span>
+        <div class="MeuQuizz">
+                <img src="${elemento.image}">
+                <div class="degrade2"></div>
+                <span>${elemento.title}</span>
+        </div>
+
+        <div class="prosseguirPerguntas" onclick = "verificarNivelQuizz()">
+            <p>Acessar quizz</p>
+        </div>
+        <br>
+        <div class="voltar-home" onclick="irHome()">
+            <p>Volta para home</p>
+        </div>
+    </div>        
+    `
 }
 
 function colocarTelaCarregando() {
@@ -720,10 +751,10 @@ function ehCardValido (resposta, url) {
 }
 
 function ehDadosNiveisValidos (titulo, acertosMin, url, descricao) {
-    return (ehTituloNivelValido(titulo) === true
-        && ehPorcentagemNivelValida(acertosMin) === true
-        && ehUrlValida(url) === true
-        && ehDescricaoNiveisValida(descricao) === true)
+    return (ehTituloNivelValido(titulo)
+        && ehPorcentagemNivelValida(acertosMin)
+        && ehUrlValida(url)
+        && ehDescricaoNiveisValida(descricao))
 }
 
 function ehTituloNivelValido(titulo){
@@ -754,11 +785,6 @@ function finalizarQuizz(){
     promise.then(resumoQuizz());
     console.log(promise);
 }
-
-
-
-
-
 
 
 function resumoQuizz(titulo, url){
