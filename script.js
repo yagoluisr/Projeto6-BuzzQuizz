@@ -18,24 +18,52 @@ function renderizarTela1() {
 
     conteudoTela.innerHTML = `
         <div class="tela1">
-            <div class="criarQuizz">
+        <!-- <div class="criarQuizz">
                 <p>Você não criou nenhum quizz ainda :(</p>
             <div onclick="exibirCriarQuizz()">Criar Quizz</div>
-        </div>
+        </div> -->
 
-        <!-- <div class="seusQuizzes">
+         <div class="seusQuizzes">
             <div>
                 <p>Seus Quizzes</p>
                 <ion-icon name="add-outline" onclick="exibirCriarQuizz()"></ion-icon>
             </div>
             <div class="galeria"></div>
-        </div> -->
+        </div> 
         
         <div class="todosQuizzes">
             <p>Todos os Quizzes</p>
             <div class="galeria"></div>
         </div>
     `;
+}
+
+function buscarMeusQuizzes() {
+
+    if (localStorage.getItem("listaID") !== null) {
+        let listaSerializada = localStorage.getItem("listaID");
+        let listaIDs = JSON.parse(listaSerializada);
+
+        for(let i = 0; i < listaIDs.length; i++){
+
+            let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${listaIDs[i]}`)
+            promise.then(renderizarMeusQuizzes)
+        }
+    } 
+    
+}
+
+function renderizarMeusQuizzes(elemento) {
+    let meuQuizz = elemento.data;
+    let galeriaMeusQuizzes = document.querySelector(".galeria");
+
+    galeriaMeusQuizzes.innerHTML += `
+        <div class="quizz2" onclick="obterQuizz(${meuQuizz.id}); colocarTelaCarregando()">
+            <img src="${meuQuizz.image}">
+            <div class="degrade"></div>
+            <span>${meuQuizz.title}</span>
+        </div> 
+        `   
 }
 
 function buscarQuizzes(){
