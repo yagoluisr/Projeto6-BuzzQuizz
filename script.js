@@ -14,6 +14,8 @@ buscarQuizzes();
 
 function renderizarTela1() {
 
+    conteudoTela.innerHTML = '';
+
     conteudoTela.innerHTML = `
         <div class="tela1">
             <div class="criarQuizz">
@@ -246,7 +248,10 @@ function verificarNivel() {
 
 function irHome() {
     conteudoTela.innerHTML = '';
-    renderizarTela1();
+
+    reiniciarVariaveis();
+    colocarTelaCarregando();
+    buscarQuizzes();
 }
 
 function reiniciarQuizz() {
@@ -533,7 +538,7 @@ function verificarNivelQuizz () {
 
             nivel = {
                 image: url,
-                minValue: acertosMin,
+                minValue: Number(acertosMin),
                 text: descricao,
                 title: titulo
             }
@@ -560,18 +565,39 @@ function atualizarQuizzUsuario (elemento, fase) {
     if (fase === 1) {
         quizzCriado.image = elemento.image;
         quizzCriado.title = elemento.title;
-
-        console.log(quizzCriado);
     }
     if (fase === 2) {
         quizzCriado.questions = elemento;
-
-        console.log(quizzCriado);
     }
     if (fase === 3) {
         quizzCriado.levels = elemento;
 
         console.log(quizzCriado);
+    }
+}
+
+function enviarQuizz() {
+    let promise = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizzCriado);
+    promise.then(armazenarIdUsuario);
+}
+
+function armazenarIdUsuario(elemento) {
+    let id = elemento.id;
+
+    let lista = [id];
+
+    if (localStorage.getItem("listaID") !== null) {
+        const listaSerializada = localStorage.getItem("listaID");
+        const idsArmazenados = JSON.parse(listaSerializada);
+
+        idsArmazenados.push(id)
+
+        listaSerializada = JSON.stringify(idsArmazenados);
+        localStorage.removeItem("listaID");
+        localStorage.setItem("listaID", listaSerializada);
+    } else {
+        lista = JSON.stringify(lista);
+        localStorage.setItem("listaID", lista);
     }
 }
 
