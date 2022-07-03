@@ -584,9 +584,13 @@ function enviarQuizz() {
     let promise = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizzCriado);
     promise.catch(alertErro);
     promise.then(armazenarIdUsuario);
+    console.log(promise);
 }
 
 function armazenarIdUsuario(elemento) {
+    console.log(elemento);
+    console.log(elemento.data);
+    console.log(elemento.data.id);
     let id = elemento.data.id;
 
     let lista = [id];
@@ -615,13 +619,13 @@ function resumoQuizz(elemento) {
     conteudoTela.innerHTML = `
     <div class="tela3">
         <span>Seu quizz está pronto!</span>
-        <div class="MeuQuizz">
+        <div class="MeuQuizz" onclick = "obterQuizz(${elemento.id}); colocarTelaCarregando()">
                 <img src="${elemento.image}">
                 <div class="degrade2"></div>
                 <span>${elemento.title}</span>
         </div>
 
-        <div class="prosseguirPerguntas" onclick = "verificarNivelQuizz()">
+        <div class="prosseguirPerguntas" onclick = "obterQuizz(${elemento.id}); colocarTelaCarregando()">
             <p>Acessar quizz</p>
         </div>
         <br>
@@ -776,37 +780,4 @@ function ehDescricaoNiveisValida(descricao){
         return true;
     }
     return false;
-}
-
-
-function finalizarQuizz(){
-
-    const promise = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", meuQuizz);
-    promise.then(resumoQuizz());
-    console.log(promise);
-}
-
-
-function resumoQuizz(titulo, url){
-
-    conteudoTela.innerHTML = '';
-
-    conteudoTela.innerHTML = `
-    <div class="tela3">
-        <span>Seu quizz está pronto!</span>
-        <div class="MeuQuizz">
-                <img src="${url}">
-                <div class="degrade2"></div>
-                <span>"${titulo}"</span>
-        </div>
-
-        <div class="prosseguirPerguntas" onclick = "verificarNivelQuizz()">
-            <p>Acessar quizz</p>
-        </div>
-        <br>
-        <div class="voltar-home" onclick="irHome()">
-            <p>Volta para home</p>
-        </div>
-    </div>        
-    `
 }
