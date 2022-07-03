@@ -2,7 +2,7 @@ let conteudoTela = document.querySelector('.conteudo');
 let idPerguntaAtual = 0;
 let pontuacao = 0;
 let porcentagem = 0;
-let meuQuizz = {};
+let quizzCriado = {};
 
 let qtdNiveisUsuario;
 let quizzEscolhido;
@@ -54,7 +54,7 @@ function renderizarQuizzes(resposta){
 
     let galeriaQuizz = document.querySelector(".todosQuizzes .galeria");
     
-    for (let i = 0; i < arrayQuizzes.length; i++ ){
+    for (let i = 0; i < arrayQuizzes.length; i++){
 
             galeriaQuizz.innerHTML += `
             <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id}); colocarTelaCarregando()">
@@ -382,6 +382,14 @@ function expandirPergunta(id) {
     let imgJaSelecionada = document.querySelector(".expandir img");
 
     if (jaSelecionada !== null) {
+        jaSelecionada.classList.remove("expandir");
+        imgJaSelecionada.classList.remove("escondido");
+    }
+
+    perguntaSelecionada.classList.add("expandir");
+    imgPerguntaSelecionada.classList.add("escondido");
+
+    if (jaSelecionada === perguntaSelecionada) {
         jaSelecionada.classList.toggle("expandir");
         imgJaSelecionada.classList.toggle("escondido");
     }
