@@ -2,7 +2,7 @@ let conteudoTela = document.querySelector('.conteudo');
 let idPerguntaAtual = 0;
 let pontuacao = 0;
 let porcentagem = 0;
-let meuQuizz = {};
+let quizzCriado = {};
 
 let qtdNiveisUsuario;
 let quizzEscolhido;
@@ -254,6 +254,7 @@ function reiniciarQuizz() {
     retirarClasses();
     document.querySelector(".bannerQuizz").scrollIntoView({behavior: "smooth"});
 }
+
 
 function reiniciarVariaveis() {
     idPerguntaAtual = 0;
@@ -724,11 +725,17 @@ function ehDescricaoNiveisValida(descricao){
 function finalizarQuizz(){
 
     const promise = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", meuQuizz);
-    promise.then(reseumoQuizz());
-
+    promise.then(resumoQuizz());
+    console.log(promise);
 }
 
-function reseumoQuizz(){
+
+
+
+
+
+
+function resumoQuizz(titulo, url){
 
     conteudoTela.innerHTML = '';
 
@@ -736,9 +743,9 @@ function reseumoQuizz(){
     <div class="tela3">
         <span>Seu quizz está pronto!</span>
         <div class="MeuQuizz">
-                <img src="/Img/ex.png">
+                <img src="${url}">
                 <div class="degrade2"></div>
-                <span>O quão Potterhead é você?</span>
+                <span>"${titulo}"</span>
         </div>
 
         <div class="prosseguirPerguntas" onclick = "verificarNivelQuizz()">

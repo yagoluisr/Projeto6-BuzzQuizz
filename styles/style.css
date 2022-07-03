@@ -261,7 +261,6 @@ img {
 
 .quizzPergunta .opcao {
     margin-top: 20px;
-    box-shadow: inset 0px -25px 37px -11px #000000;
     width: 329px;
     overflow: hidden;
     cursor: pointer;
@@ -275,6 +274,7 @@ img {
 .quizzPergunta .opcao p {
     font-weight: 700;
     font-size: 20px;
+    margin-top: 12px;
     color: #000000;
 }
 
