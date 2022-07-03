@@ -1,8 +1,8 @@
 let conteudoTela = document.querySelector('.conteudo');
 let idPerguntaAtual = 0;
-let quizzCriado = {};
-let porcentagem = 0;
 let pontuacao = 0;
+let porcentagem = 0;
+let meuQuizz = {};
 
 let qtdNiveisUsuario;
 let quizzEscolhido;
@@ -13,6 +13,8 @@ colocarTelaCarregando();
 buscarQuizzes();
 
 function renderizarTela1() {
+
+    conteudoTela.innerHTML = '';
 
     conteudoTela.innerHTML = `
         <div class="tela1">
@@ -344,26 +346,26 @@ function inserirPergunta(perguntas) {
                 </div>
                 <li>
                     <input type="text" placeholder="Texto da pergunta" class="titulo">
-                    <input type="text" placeholder="Cor de fundo da pergunta" class="cor">
+                    <input type="text" placeholder="Cor de fundo da pergunta" class="titulo">
                 </li>
                 <li>
                     <span>Resposta correta</span>
-                    <input type="text" placeholder="Resposta correta" class="respostaCorreta">
-                    <input type="text" placeholder="URL da imagem" class="urlCorreta">
+                    <input type="text" placeholder="Resposta correta" class="titulo">
+                    <input type="text" placeholder="URL da imagem" class="titulo">
                 </li>
                 <li>
                     <span>Respostas incorretas</span>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 1" class="resposta1">
-                        <input type="text" placeholder="URL da imagem 1" class="URL1">
+                        <input type="text" placeholder="Resposta incorreta 1" class="titulo">
+                        <input type="text" placeholder="URL da imagem 1" class="titulo">
                     </div>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 2" class="resposta2">
-                        <input type="text" placeholder="URL da imagem 2" class="URL2">
+                        <input type="text" placeholder="Resposta incorreta 2" class="titulo">
+                        <input type="text" placeholder="URL da imagem 2" class="titulo">
                     </div>
                     <div>
-                        <input type="text" placeholder="Resposta incorreta 3" class="resposta3">
-                        <input type="text" placeholder="URL da imagem 3" class="URL3">
+                        <input type="text" placeholder="Resposta incorreta 3" class="titulo">
+                        <input type="text" placeholder="URL da imagem 3" class="titulo">
                     </div>
                 </li>
             </ul>
@@ -380,14 +382,6 @@ function expandirPergunta(id) {
     let imgJaSelecionada = document.querySelector(".expandir img");
 
     if (jaSelecionada !== null) {
-        jaSelecionada.classList.remove("expandir");
-        imgJaSelecionada.classList.remove("escondido");
-    }
-
-    perguntaSelecionada.classList.add("expandir");
-    imgPerguntaSelecionada.classList.add("escondido");
-
-    if (jaSelecionada === perguntaSelecionada) {
         jaSelecionada.classList.toggle("expandir");
         imgJaSelecionada.classList.toggle("escondido");
     }
