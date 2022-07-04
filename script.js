@@ -57,12 +57,14 @@ function renderizarQuizzes(resposta){
     for (let i = 0; i < arrayTodosQuizzes.length; i++){
 
             galeriaQuizz.innerHTML += `
-            <div class="quizz2" onclick="obterQuizz(${arrayTodosQuizzes[i].id}); colocarTelaCarregando()">
+            <div class="quizz2">
+                <ion-icon name="star-outline" class="" onclick="favoritarQuizz(this, ${arrayTodosQuizzes[i].id})"></ion-icon>
+                <ion-icon name="star" class="escondido" onclick="favoritarQuizz(this, ${arrayTodosQuizzes[i].id})"></ion-icon>
                 <img src="${arrayTodosQuizzes[i].image}">
-                <div class="degrade"></div>
+                <div class="degrade" onclick="obterQuizz(${arrayTodosQuizzes[i].id}); colocarTelaCarregando()"></div>
                 <span>${arrayTodosQuizzes[i].title}</span>
             </div>
-            `
+            `;
     }
 }
 
@@ -73,6 +75,8 @@ function renderizarTela1() {
     conteudoTela.innerHTML = `
         <div class="tela1">
             <div class="quizzesUsuario"></div>
+
+            <div class="quizzesFavoritos"></div>
             
             <div class="todosQuizzes">
                 <p>Todos os Quizzes</p>
@@ -81,6 +85,7 @@ function renderizarTela1() {
     `;
 
     criarSecaoQuizzUsuario();
+    criarSecaoQuizzFavorito();
 }
 
 function criarSecaoQuizzUsuario () {
@@ -89,7 +94,7 @@ function criarSecaoQuizzUsuario () {
 
     secaoQuizzUsuario.innerHTML = `
         <div class="seusQuizzes">
-            <div>
+            <div class="seus-quizzes-topo">
                 <p>Seus Quizzes</p>
                 <ion-icon name="add-outline" onclick="exibirCriarQuizz()"></ion-icon>
             </div>
@@ -128,9 +133,12 @@ function renderizarMeusQuizzes(elemento) {
     let galeriaMeusQuizzes = document.querySelector(".seusQuizzes .galeria");
 
     galeriaMeusQuizzes.innerHTML += `
-        <div class="quizz2" onclick="obterQuizz(${meuQuizz.id}); colocarTelaCarregando()">
+        <div class="quizz2">
+            <div class="botao-usuario" onclick="alertIndisponivel()">
+                <ion-icon name="trash-outline"></ion-icon>
+            </div>
             <img src="${meuQuizz.image}">
-            <div class="degrade"></div>
+            <div class="degrade" onclick="obterQuizz(${meuQuizz.id}); colocarTelaCarregando()"></div>
             <span>${meuQuizz.title}</span>
         </div> 
     `;   
@@ -707,6 +715,73 @@ function colocarTelaCarregando() {
     `;
 }
 
+function favoritarQuizz(elemento, IdQuizz) {
+    let icons = elemento.parentNode.querySelectorAll("ion-icon");
+    icons.forEach(icon => {icon.classList.toggle('escondido')});
+
+    armazenarIdFavorito(IdQuizz);
+}
+
+function criarSecaoQuizzFavorito () {
+
+    let secaoQuizzFavorito = document.querySelector(".quizzesFavoritos");
+
+    secaoQuizzFavorito.innerHTML = `
+        <p>Seus Quizzes Favoritos</p>
+        <div class="galeria"></div>  
+    `;
+    buscarQuizzesFavoritos();
+}
+
+function buscarQuizzesFavoritos() {
+    let secaoQuizzFavorito = document.querySelector(".quizzesFavoritos");
+
+    if (localStorage.getItem("quizzesFavoritos") !== null) {
+        let listaSerializada = localStorage.getItem("quizzesFavoritos");
+        let listaIDs = JSON.parse(listaSerializada);
+
+        for(let i = 0; i < listaIDs.length; i++){
+
+            let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${listaIDs[i]}`)
+            promise.then(renderizarQuizzesFavoritos);
+        }
+    } else {
+        secaoQuizzFavorito.innerHTML = "";
+    }
+}
+
+function renderizarQuizzesFavoritos(elemento) {
+
+    let quizzFavorito = elemento.data;
+    let galeriaQuizzesFavoritos = document.querySelector(".quizzesFavoritos .galeria");
+
+    galeriaQuizzesFavoritos.innerHTML += `
+        <div class="quizz2" onclick="obterQuizz(${quizzFavorito.id}); colocarTelaCarregando()">
+            <img src="${quizzFavorito.image}">
+            <div class="degrade"></div>
+            <span>${quizzFavorito.title}</span>
+        </div> 
+    `;   
+}
+
+function armazenarIdFavorito(id) {
+    let lista = [id];
+
+    if (localStorage.getItem("quizzesFavoritos") !== null) {
+        let listaSerializada = localStorage.getItem("quizzesFavoritos");
+        let idsArmazenados = JSON.parse(listaSerializada);
+
+        idsArmazenados.push(id)
+
+        listaSerializada = JSON.stringify(idsArmazenados);
+        localStorage.removeItem("quizzesFavoritos");
+        localStorage.setItem("quizzesFavoritos", listaSerializada);
+    } else {
+        lista = JSON.stringify(lista);
+        localStorage.setItem("quizzesFavoritos", lista);
+    }
+}
+
 function alertErro(erro) {
     if (erro === "dadosBasicos") {
         alert(`Dados incorretos, por favor verifique se:\n
@@ -733,10 +808,14 @@ function alertErro(erro) {
         A descrição tem no mínimo 30 caracteres`);
     }
     else {
-        alert("Sentimos muito, não foi possível criar o quizz");
+        alert("Sentimos muito, não foi possível criar o quizz.");
         colocarTelaCarregando();
         buscarQuizzes();
     }  
+}
+
+function alertIndisponivel() {
+    alert("Sentimos muito, essa função está indisponível no momento.");
 }
 
 function recarregarPagina() {

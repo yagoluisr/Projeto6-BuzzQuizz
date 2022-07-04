@@ -26,7 +26,7 @@ img {
     justify-content: center;
     background-color: #EC362D;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    z-index: 1;
+    z-index: 2;
 }
 
 .topo span{
@@ -82,23 +82,32 @@ img {
     border-radius: 50px;    
 }
 
-.seusQuizzes {
+.seusQuizzes,
+.quizzesFavoritos {
     width: 1050px;
     margin: 69px auto 48px;
 }
 
-.seusQuizzes :nth-child(1){
+.seusQuizzes .seus-quizzes-topo {
     display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
-.seusQuizzes p {
+.seusQuizzes p,
+.quizzesFavoritos p {
     height: 23px;
     width: 158px;
     font-weight: 700;
     font-size: 20px;
 }
 
-.seusQuizzes span{
+.quizzesFavoritos p {
+    width: auto;
+}
+
+.seusQuizzes span,
+.quizzesFavoritos span {
     height: 54px;
     font-weight: 400;
     font-size: 19px;
@@ -147,6 +156,7 @@ img {
 .galeria img{
     height: 181px;
     width: 340px;
+    border-radius: 5px;
 }
 
 .galeria span{
@@ -169,6 +179,7 @@ img {
     top: 0;
     background: rgb(0,0,0);
     background: linear-gradient(0deg, rgba(0,0,0,1) 7%, rgba(255,255,255,0) 100%);
+    border-radius: 5px;
 }
 
 .degrade2 {
@@ -193,24 +204,6 @@ img {
 .escondido {
     display: none;
 }
-
-/* .topoQuizz {
-    height: 227px;
-    width: 1440px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-}
-
-.topoQuizz span {
-    height: 54px;
-    width: 1051px;
-    font-weight: 400;
-    font-size: 39px;
-    text-align: center;
-    color: #ffffff;
-} */
 
 .bannerQuizz {
     width: 100%;
@@ -542,7 +535,46 @@ img {
     border-radius: 5px;
 }
 
+.quizz2 ion-icon {
+    position: absolute;
+    font-size: 30px;
+    color: gold;
+    left: 5px;
+    top: 5px;
+    opacity: 0;
+    z-index: 1;
+}
 
+.quizz2:hover ion-icon {
+    opacity: 1;
+}
+
+.quizz2 .botao-usuario {
+    display: flex;
+    align-items: center;
+    width: 16%;
+    min-width: 30px;
+    max-width: 50px;
+    height: 32%;
+    justify-content: space-around;
+    border-radius: 10px 0 0 10px;
+    background-color: #EC362D;
+    position: absolute;
+    right: 0;
+    top: 12px;
+    z-index: 1;
+    margin: 0;
+    cursor: pointer;
+}
+
+.quizz2 .botao-usuario ion-icon {
+    color: white;
+    width: 80%;
+    height: 60%;
+    min-width: 10px;
+    min-height: 20px;
+    opacity: 1;
+}
 
 
 @media (max-width: 1100px){
@@ -565,7 +597,8 @@ img {
         margin-bottom: 35px;
     }
 
-    .seusQuizzes {
+    .seusQuizzes,
+    .quizzesFavoritos {
         width: 100%;        
     }
 
@@ -751,6 +784,7 @@ img {
         border-radius: 5px;
     }
 
-
-
+    .quizz2 ion-icon {
+        opacity: 1;
+    }
 }
