@@ -177,6 +177,7 @@ img {
     position: absolute;
     left: 0;
     top: 0;
+    border-radius: 5px;
     background: rgb(0,0,0);
     background: linear-gradient(0deg, rgba(0,0,0,1) 7%, rgba(255,255,255,0) 100%);
     border-radius: 5px;
@@ -188,6 +189,7 @@ img {
     position: absolute;
     left: 0;
     top: 0;
+    border-radius: 5px;
     background: rgb(0,0,0);
     background: linear-gradient(0deg, rgba(0,0,0,0.7539390756302521) 14%, rgba(255,255,255,0) 100%);
 }
@@ -199,6 +201,10 @@ img {
     border-radius: 5px;
     position: relative;
     cursor: pointer;
+}
+
+.quizz2 img {
+    border-radius: 5px;
 }
 
 .escondido {
