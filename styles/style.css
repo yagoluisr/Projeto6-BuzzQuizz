@@ -167,6 +167,7 @@ img {
     position: absolute;
     left: 0;
     top: 0;
+    border-radius: 5px;
     background: rgb(0,0,0);
     background: linear-gradient(0deg, rgba(0,0,0,1) 7%, rgba(255,255,255,0) 100%);
 }
@@ -177,6 +178,7 @@ img {
     position: absolute;
     left: 0;
     top: 0;
+    border-radius: 5px;
     background: rgb(0,0,0);
     background: linear-gradient(0deg, rgba(0,0,0,0.7539390756302521) 14%, rgba(255,255,255,0) 100%);
 }
@@ -190,27 +192,13 @@ img {
     cursor: pointer;
 }
 
+.quizz2 img {
+    border-radius: 5px;
+}
+
 .escondido {
     display: none;
 }
-
-/* .topoQuizz {
-    height: 227px;
-    width: 1440px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-}
-
-.topoQuizz span {
-    height: 54px;
-    width: 1051px;
-    font-weight: 400;
-    font-size: 39px;
-    text-align: center;
-    color: #ffffff;
-} */
 
 .bannerQuizz {
     width: 100%;
