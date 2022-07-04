@@ -662,7 +662,7 @@ function resumoQuizz(elemento) {
     conteudoTela.innerHTML = `
         <div class="tela3">
             <span>Seu quizz está pronto!</span>
-            <div class="MeuQuizz">
+            <div class="MeuQuizz" onclick = "obterQuizz(${elemento.id}); colocarTelaCarregando()">
                     <img src="${elemento.image}">
                     <div class="degrade2"></div>
                     <span>${elemento.title}</span>
