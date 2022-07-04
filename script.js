@@ -26,17 +26,28 @@ function renderizarQuizzes(resposta){
 
     let listaIDs;
     let arrayTodosQuizzes = [];
+    let arrayTodosIDs = [];
 
     if (localStorage.getItem("listaID") !== null) {
         let listaSerializada = localStorage.getItem("listaID");
         listaIDs = JSON.parse(listaSerializada);
 
-        arrayTodosQuizzes = arrayQuizzes.filter(elemento => {
-            for(let i = 0; i < listaIDs.length; i++){
-                if (elemento.id !== listaIDs[i])
-                return elemento;
+        for(let i = 0; i < arrayQuizzes.length; i++) {
+            arrayTodosIDs.push(arrayQuizzes[i].id);
+        }
+
+        for(let i = 0; i < listaIDs.length; i++) {
+            if (arrayTodosIDs.includes(listaIDs[i])) {
+                let index = arrayTodosIDs.indexOf(listaIDs[i]);
+                arrayTodosIDs.splice(index, 1);
             }
-        });
+        }
+
+        for (let i = 0; i < arrayQuizzes.length; i++) {
+            if (arrayTodosIDs.includes(arrayQuizzes[i].id)) {
+                arrayTodosQuizzes.push(arrayQuizzes[i]);
+            }
+        }
     } else {
         arrayTodosQuizzes = arrayQuizzes;
     }
@@ -69,6 +80,22 @@ function renderizarTela1() {
         </div>
     `;
 
+    criarSecaoQuizzUsuario();
+}
+
+function criarSecaoQuizzUsuario () {
+
+    let secaoQuizzUsuario = document.querySelector(".quizzesUsuario");
+
+    secaoQuizzUsuario.innerHTML = `
+        <div class="seusQuizzes">
+            <div>
+                <p>Seus Quizzes</p>
+                <ion-icon name="add-outline" onclick="exibirCriarQuizz()"></ion-icon>
+            </div>
+            <div class="galeria"></div>
+        </div> 
+    `;
     buscarMeusQuizzes();
 }
 
@@ -82,7 +109,7 @@ function buscarMeusQuizzes() {
         for(let i = 0; i < listaIDs.length; i++){
 
             let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${listaIDs[i]}`)
-            promise.then(renderizarMeusQuizzes)
+            promise.then(renderizarMeusQuizzes);
         }
 
     } else {
@@ -98,18 +125,6 @@ function buscarMeusQuizzes() {
 function renderizarMeusQuizzes(elemento) {
 
     let meuQuizz = elemento.data;
-    let secaoQuizzUsuario = document.querySelector(".quizzesUsuario");
-
-    secaoQuizzUsuario.innerHTML = `
-        <div class="seusQuizzes">
-            <div>
-                <p>Seus Quizzes</p>
-                <ion-icon name="add-outline" onclick="exibirCriarQuizz()"></ion-icon>
-            </div>
-            <div class="galeria"></div>
-        </div> 
-    `;
-    
     let galeriaMeusQuizzes = document.querySelector(".seusQuizzes .galeria");
 
     galeriaMeusQuizzes.innerHTML += `
