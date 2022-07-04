@@ -12,37 +12,10 @@ let arrayQuizzes;
 colocarTelaCarregando();
 buscarQuizzes();
 
-function renderizarTela1() {
-
-    conteudoTela.innerHTML = '';
-
-    conteudoTela.innerHTML = `
-        <div class="tela1">
-            <div class="criarQuizz">
-                <p>Você não criou nenhum quizz ainda :(</p>
-            <div onclick="exibirCriarQuizz()">Criar Quizz</div>
-        </div>
-
-        <!-- <div class="seusQuizzes">
-            <div>
-                <p>Seus Quizzes</p>
-                <ion-icon name="add-outline" onclick="exibirCriarQuizz()"></ion-icon>
-            </div>
-            <div class="galeria"></div>
-        </div> -->
-        
-        <div class="todosQuizzes">
-            <p>Todos os Quizzes</p>
-            <div class="galeria"></div>
-        </div>
-    `;
-}
-
 function buscarQuizzes(){
 
     let promise = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes");
     promise.then(renderizarQuizzes);
-    console.log(promise)
 }
 
 function renderizarQuizzes(resposta){
@@ -50,27 +23,108 @@ function renderizarQuizzes(resposta){
     renderizarTela1();
 
     arrayQuizzes = resposta.data;
-    console.log(arrayQuizzes)
+
+    let listaIDs;
+    let arrayTodosQuizzes = [];
+
+    if (localStorage.getItem("listaID") !== null) {
+        let listaSerializada = localStorage.getItem("listaID");
+        listaIDs = JSON.parse(listaSerializada);
+
+        arrayTodosQuizzes = arrayQuizzes.filter(elemento => {
+            for(let i = 0; i < listaIDs.length; i++){
+                if (elemento.id !== listaIDs[i])
+                return elemento;
+            }
+        });
+    } else {
+        arrayTodosQuizzes = arrayQuizzes;
+    }
 
     let galeriaQuizz = document.querySelector(".todosQuizzes .galeria");
     
-    for (let i = 0; i < arrayQuizzes.length; i++){
+    for (let i = 0; i < arrayTodosQuizzes.length; i++){
 
             galeriaQuizz.innerHTML += `
-            <div class="quizz2" onclick="obterQuizz(${arrayQuizzes[i].id}); colocarTelaCarregando()">
-                <img src="${arrayQuizzes[i].image}">
+            <div class="quizz2" onclick="obterQuizz(${arrayTodosQuizzes[i].id}); colocarTelaCarregando()">
+                <img src="${arrayTodosQuizzes[i].image}">
                 <div class="degrade"></div>
-                <span>${arrayQuizzes[i].title}</span>
+                <span>${arrayTodosQuizzes[i].title}</span>
             </div>
             `
     }
+}
+
+function renderizarTela1() {
+
+    conteudoTela.innerHTML = '';
+
+    conteudoTela.innerHTML = `
+        <div class="tela1">
+            <div class="quizzesUsuario"></div>
+            
+            <div class="todosQuizzes">
+                <p>Todos os Quizzes</p>
+            <div class="galeria"></div>
+        </div>
+    `;
+
+    buscarMeusQuizzes();
+}
+
+function buscarMeusQuizzes() {
+    let secaoQuizzUsuario = document.querySelector(".quizzesUsuario");
+
+    if (localStorage.getItem("listaID") !== null) {
+        let listaSerializada = localStorage.getItem("listaID");
+        let listaIDs = JSON.parse(listaSerializada);
+
+        for(let i = 0; i < listaIDs.length; i++){
+
+            let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${listaIDs[i]}`)
+            promise.then(renderizarMeusQuizzes)
+        }
+
+    } else {
+        secaoQuizzUsuario.innerHTML = `
+            <div class="criarQuizz">
+                <p>Você não criou nenhum quizz ainda :(</p>
+                <div onclick="exibirCriarQuizz()">Criar Quizz</div>
+            </div>
+        `;
+    }
+}
+
+function renderizarMeusQuizzes(elemento) {
+
+    let meuQuizz = elemento.data;
+    let secaoQuizzUsuario = document.querySelector(".quizzesUsuario");
+
+    secaoQuizzUsuario.innerHTML = `
+        <div class="seusQuizzes">
+            <div>
+                <p>Seus Quizzes</p>
+                <ion-icon name="add-outline" onclick="exibirCriarQuizz()"></ion-icon>
+            </div>
+            <div class="galeria"></div>
+        </div> 
+    `;
+    
+    let galeriaMeusQuizzes = document.querySelector(".seusQuizzes .galeria");
+
+    galeriaMeusQuizzes.innerHTML += `
+        <div class="quizz2" onclick="obterQuizz(${meuQuizz.id}); colocarTelaCarregando()">
+            <img src="${meuQuizz.image}">
+            <div class="degrade"></div>
+            <span>${meuQuizz.title}</span>
+        </div> 
+    `;   
 }
 
 function obterQuizz(id){
 
     let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${id}`);
     promise.then(exibirQuizz);
-    console.log(promise);
 }
 
 function exibirCriarQuizz() {
@@ -309,7 +363,7 @@ function verificarDados() {
         criarPerguntas(qtdPerguntas);
 
     } else {
-        alertErro();
+        alertErro("dadosBasicos");
     }
 }
 
@@ -342,7 +396,7 @@ function inserirPergunta(perguntas) {
             <ul class="pergunta${i}">
                 <div onclick="expandirPergunta(${i})">
                 <span>Pergunta ${i}</span>
-                <img src="./Img/Editar.svg">
+                <img src="./img/Editar.svg">
                 </div>
                 <li>
                     <input type="text" placeholder="Texto da pergunta" class="titulo">
@@ -468,7 +522,7 @@ function verificarPerguntasCriadas(qtdPerguntas) {
         atualizarQuizzUsuario(perguntas.questions, 2);
         renderizarNiveis();
     } else {
-        alertErro();
+        alertErro("criarPerguntas");
     }
 }
 
@@ -500,7 +554,7 @@ function inserirNiveis() {
                 <ul class="pergunta${i} nivel">
                     <div onclick="expandirPergunta(${i})">
                         <span>Nivel ${i}</span>
-                        <img src="./Img/Editar.svg">
+                        <img src="./img/Editar.svg">
                     </div>
                     <div></div>
                     <input type="text" placeholder="Título do nível">
@@ -548,21 +602,14 @@ function verificarNivelQuizz () {
             }
 
             niveis.levels.push(nivel);
-        } else {
-            alertErro();
         }
     }
 
-    if(check === false){
-        alertErro();
+    if((check === true) && (verificadas === qtdNiveisUsuario)){
+        colocarTelaCarregando();
+        atualizarQuizzUsuario(niveis.levels, 3);
     } else {
-
-        if (verificadas === qtdNiveisUsuario) {
-            colocarTelaCarregando();
-            atualizarQuizzUsuario(niveis.levels, 3);
-        } else {
-            alertErro();
-        }
+        alertErro("criarNiveis");
     }
 }
 
@@ -613,23 +660,23 @@ function resumoQuizz(elemento) {
     conteudoTela.innerHTML = '';
 
     conteudoTela.innerHTML = `
-    <div class="tela3">
-        <span>Seu quizz está pronto!</span>
-        <div class="MeuQuizz">
-                <img src="${elemento.image}">
-                <div class="degrade2"></div>
-                <span>${elemento.title}</span>
-        </div>
+        <div class="tela3">
+            <span>Seu quizz está pronto!</span>
+            <div class="MeuQuizz">
+                    <img src="${elemento.image}">
+                    <div class="degrade2"></div>
+                    <span>${elemento.title}</span>
+            </div>
 
-        <div class="prosseguirPerguntas" onclick = "verificarNivelQuizz()">
-            <p>Acessar quizz</p>
-        </div>
-        <br>
-        <div class="voltar-home" onclick="irHome()">
-            <p>Volta para home</p>
-        </div>
-    </div>        
-    `
+            <div class="prosseguirPerguntas" onclick = "obterQuizz(${elemento.id}); colocarTelaCarregando()">
+                <p>Acessar quizz</p>
+            </div>
+            <br>
+            <div class="voltar-home" onclick="irHome()">
+                <p>Volta para home</p>
+            </div>
+        </div>        
+    `;
 }
 
 function colocarTelaCarregando() {
@@ -638,15 +685,43 @@ function colocarTelaCarregando() {
     conteudoTela.innerHTML = `
         <div class="telaCarregamento">
             <div>
-                <img src="./Img/spinner.gif">
+                <img src="./img/spinner.gif">
                 <p>Carregando</p>
             </div>
         </div> 
     `;
 }
 
-function alertErro() {
-    alert("Atenção, dado(s) inválido(s). Por favor, verifique os campos.");   
+function alertErro(erro) {
+    if (erro === "dadosBasicos") {
+        alert(`Dados incorretos, por favor verifique se:\n
+        Todos os campos estão preenchidos,
+        O título tem entre 20 e 65 caracteres,
+        A URL é válida,
+        A quantidade de perguntas é no mínimo 3,
+        A quantidade de níveis é no mínimo 2`);
+    }
+    else if (erro === "criarPerguntas") {
+        alert(`Dados incorretos, por favor verifique se:\n
+        Todos os campos estão preenchidos,
+        O título tem no mínimo 20 caracteres,
+        É uma cor em hexadecimal,
+        Tem pelo menos 1 resposta correta e 1 errada por pergunta,
+        As respostas correspondem com as URL`);
+    }
+    else if (erro === "criarNiveis") {
+        alert(`Dados incorretos, por favor verifique se:\n
+        Todos os campos estão preenchidos,
+        O título tem no mínimo 10 caracteres,
+        A porcentagem está entre 0 e 100,
+        Tem um nível 0,
+        A descrição tem no mínimo 30 caracteres`);
+    }
+    else {
+        alert("Sentimos muito, não foi possível criar o quizz");
+        colocarTelaCarregando();
+        buscarQuizzes();
+    }  
 }
 
 function recarregarPagina() {
@@ -684,8 +759,8 @@ function ehPerguntaAtual(opcao) {
 }
 
 function ehDadosBasicosValidos (titulo, url, perguntas, niveis) {
-    return (ehTituloDadosBasicosValido(titulo) === true && ehUrlValida(url) === true
-        && ehQtdPerguntasValida(perguntas) === true && ehQtdNiveisValidos(niveis) === true);
+    return (ehTituloDadosBasicosValido(titulo) && ehUrlValida(url)
+        && ehQtdPerguntasValida(perguntas) && ehQtdNiveisValidos(niveis));
 }
 
 function ehTituloDadosBasicosValido(titulo){
