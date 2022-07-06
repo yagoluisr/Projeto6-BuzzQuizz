@@ -14,7 +14,7 @@ buscarQuizzes();
 
 function buscarQuizzes(){
 
-    let promise = axios.get("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes");
+    let promise = axios.get("https://mock-api.driven.com.br/api/vs/buzzquizz/quizzes");
     promise.then(renderizarQuizzes);
 }
 
@@ -113,7 +113,7 @@ function buscarMeusQuizzes() {
 
         for(let i = 0; i < listaIDs.length; i++){
 
-            let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${listaIDs[i]}`)
+            let promise = axios.get(`https://mock-api.driven.com.br/api/vs/buzzquizz/quizzes/${listaIDs[i]}`)
             promise.then(renderizarMeusQuizzes);
         }
 
@@ -146,7 +146,7 @@ function renderizarMeusQuizzes(elemento) {
 
 function obterQuizz(id){
 
-    let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${id}`);
+    let promise = axios.get(`https://mock-api.driven.com.br/api/vs/buzzquizz/quizzes/${id}`);
     promise.then(exibirQuizz);
 }
 
@@ -651,7 +651,7 @@ function atualizarQuizzUsuario (elemento, fase) {
 }
 
 function enviarQuizz() {
-    let promise = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", quizzCriado);
+    let promise = axios.post("https://mock-api.driven.com.br/api/vs/buzzquizz/quizzes", quizzCriado);
     promise.catch(alertErro);
     promise.then(armazenarIdUsuario);
 }
@@ -742,7 +742,7 @@ function buscarQuizzesFavoritos() {
 
         for(let i = 0; i < listaIDs.length; i++){
 
-            let promise = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${listaIDs[i]}`)
+            let promise = axios.get(`https://mock-api.driven.com.br/api/vs/buzzquizz/quizzes/${listaIDs[i]}`)
             promise.then(renderizarQuizzesFavoritos);
         }
     } else {
